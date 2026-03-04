@@ -1412,6 +1412,44 @@ footer .footer-quote {
 }
 
 /* ═══════════════════════════════════════════
+   PAGE LINK BUTTON
+   ═══════════════════════════════════════════ */
+.page-link {
+  position: fixed;
+  top: 1.2rem;
+  right: calc(1.5rem + 62px);
+  z-index: 99999;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: rgba(26, 24, 20, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s;
+  color: var(--gold);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  text-decoration: none;
+}
+.page-link:hover {
+  border-color: var(--gold);
+  background: rgba(26, 24, 20, 0.8);
+  transform: scale(1.08);
+  color: var(--gold);
+}
+[data-theme="dark"] .page-link {
+  background: rgba(245, 240, 232, 0.08);
+}
+[data-theme="dark"] .page-link:hover {
+  background: rgba(245, 240, 232, 0.14);
+}
+
+/* ═══════════════════════════════════════════
    THEME TOGGLE BUTTON
    ═══════════════════════════════════════════ */
 .theme-toggle {
@@ -1509,6 +1547,8 @@ footer .footer-quote {
 </head>
 <body>
 
+<!-- Page Link -->
+<a class="page-link" href="slideshow.html" title="Zur Slideshow">&#9654;</a>
 <!-- Theme Toggle -->
 <button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln">
   <span class="icon-sun">&#9788;</span>
