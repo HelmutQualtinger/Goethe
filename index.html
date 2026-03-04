@@ -289,28 +289,39 @@ nav .nav-links a:hover::after { width: 100%; }
   right: 8%;
   top: 50%;
   transform: translateY(-50%);
-  width: 420px;
-  height: 560px;
-  opacity: 0.12;
+  width: 360px;
+  height: 480px;
+  opacity: 0.85;
 }
 .hero-portrait .portrait-frame {
   width: 100%;
   height: 100%;
-  border: 2px solid var(--gold);
-  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  border: 3px solid var(--gold);
+  border-radius: 6px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 0 0 10px rgba(26, 36, 26, 0.8), 0 0 0 12px rgba(197, 165, 90, 0.3), 0 10px 50px rgba(0,0,0,0.5);
 }
 .hero-portrait .portrait-frame::before {
   content: '';
   position: absolute;
   inset: 8px;
-  border: 1px solid rgba(197, 165, 90, 0.4);
-  border-radius: inherit;
+  border: 1px solid rgba(197, 165, 90, 0.25);
+  border-radius: 4px;
+  z-index: 1;
+  pointer-events: none;
 }
-.hero-portrait svg {
+.hero-portrait img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  display: block;
+}
+[data-theme="dark"] .hero-portrait {
+  opacity: 0.9;
+}
+[data-theme="dark"] .hero-portrait .portrait-frame {
+  box-shadow: 0 0 0 10px rgba(10, 10, 8, 0.8), 0 0 0 12px rgba(197, 165, 90, 0.2), 0 10px 50px rgba(0,0,0,0.7);
 }
 
 .hero-content {
@@ -1530,25 +1541,7 @@ footer .footer-quote {
 <section class="hero">
   <div class="hero-portrait">
     <div class="portrait-frame">
-      <svg viewBox="0 0 420 560" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="pg1" cx="50%" cy="35%" r="45%">
-            <stop offset="0%" stop-color="#C5A55A" stop-opacity="0.4"/>
-            <stop offset="100%" stop-color="#C5A55A" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="pg2" cx="50%" cy="60%" r="35%">
-            <stop offset="0%" stop-color="#C5A55A" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#C5A55A" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <!-- Abstract portrait silhouette -->
-        <ellipse cx="210" cy="180" rx="85" ry="105" fill="url(#pg1)"/>
-        <ellipse cx="210" cy="380" rx="130" ry="160" fill="url(#pg2)"/>
-        <path d="M140 200 Q160 120 210 100 Q260 120 280 200" fill="none" stroke="#C5A55A" stroke-opacity="0.3" stroke-width="1.5"/>
-        <path d="M170 230 Q190 250 210 248 Q230 250 250 230" fill="none" stroke="#C5A55A" stroke-opacity="0.2" stroke-width="1"/>
-        <circle cx="190" cy="180" r="4" fill="#C5A55A" fill-opacity="0.2"/>
-        <circle cx="230" cy="180" r="4" fill="#C5A55A" fill-opacity="0.2"/>
-      </svg>
+      <img src="img/goethe-stieler.jpg" alt="Johann Wolfgang von Goethe — Gemälde von Joseph Karl Stieler, 1828">
     </div>
   </div>
 
@@ -1592,7 +1585,9 @@ footer .footer-quote {
 
       <p>Die Mutter hingegen, Catharina Elisabeth — liebevoll »Frau Aja« genannt —, war eine warmherzige und fantasievolle Frau, die dem jungen Wolfgang die Freude am Geschichtenerzählen vermittelte. »Vom Vater hab ich die Statur, des Lebens ernstes Führen«, schrieb Goethe später, »vom Mütterchen die Frohnatur und Lust zu fabulieren.« Diese Dualität sollte sein gesamtes Schaffen durchziehen.</p>
 
-      <p>Von seiner Schwester Cornelia, mit der ihn eine innige Beziehung verband, sowie von Privatlehrern erhielt der junge Goethe eine umfassende Bildung in Sprachen, Zeichenkunst, Musik und Naturwissenschaften. Bereits als Kind verschlang er die Bücher der väterlichen Bibliothek und entwickelte eine unstillbare Wissbegierde. Die Besetzung Frankfurts durch französische Truppen während des Siebenjährigen Krieges brachte den Knaben in Kontakt mit dem französischen Theater — ein Erlebnis, das seine Leidenschaft für die dramatische Kunst entfachte.</p>
+      <p>Von sechs Kindern der Familie überlebten nur Johann Wolfgang und seine ein Jahr jüngere Schwester <strong>Cornelia</strong> (1750–1777) das Kindesalter. Die vier anderen Geschwister — Hermann Jacob, Catharina Elisabeth, Johanna Maria und Georg Adolph — starben im Säuglingsalter, wie es in jener Zeit tragisch häufig vorkam. Cornelia war Goethes engste Vertraute der Jugend: hochbegabt, sprachgewandt, leidenschaftlich. Sie teilte seinen Wissensdrang und seine literarischen Neigungen. Ihre spätere Zwangsheirat mit dem Juristen Johann Georg Schlosser und ihr früher Tod mit nur 26 Jahren erschütterten Goethe zutiefst.</p>
+
+      <p>Von Privatlehrern erhielt der junge Goethe eine enzyklopädische Bildung: Latein, Griechisch, Französisch, Italienisch, Englisch, Hebräisch, Zeichenkunst, Musik, Reiten und Fechten. Die väterliche Bibliothek mit über 2.000 Bänden stillte seine unstillbare Wissbegierde nur vorübergehend. Das Erdbeben von Lissabon 1755 erschütterte den sechsjährigen Knaben in seinem Gottvertrauen — ein frühes Zeichen jenes Nachdenkens über die Theodizee, das sein ganzes Werk durchziehen sollte. Die Besetzung Frankfurts durch französische Truppen während des Siebenjährigen Krieges brachte ihn in Kontakt mit dem französischen Theater — ein Erlebnis, das seine Leidenschaft für die dramatische Kunst entfachte.</p>
 
       <p>In seinen autobiographischen Aufzeichnungen »Dichtung und Wahrheit« schildert Goethe diese prägenden Jahre mit der ihm eigenen Mischung aus Selbstironie und tiefer Empfindsamkeit. Die frühe Begegnung mit Literatur, Kunst und den gesellschaftlichen Spannungen seiner Zeit legte das Fundament für ein Lebenswerk von beispielloser Vielfalt und Tiefe.</p>
     </div>
@@ -1688,9 +1683,29 @@ footer .footer-quote {
 
       <p>Am 3. September 1786 brach Goethe heimlich und fluchtartig nach Italien auf — eine Reise, die fast zwei Jahre dauern und sein Leben und Schaffen grundlegend verwandeln sollte. In Rom, Neapel und Sizilien studierte er die Antike, zeichnete unermüdlich, vollendete die »Iphigenie auf Tauris« in Versform und arbeitete am »Egmont« und am »Tasso«. Die Begegnung mit der antiken Kunst und der südlichen Natur wurde für ihn zur Wiedergeburt: »Ich zähle meinen zweiten Geburtstag, eine wahre Wiedergeburt, von dem Tage, da ich Rom betrat.«</p>
 
-      <p>Nach seiner Rückkehr nach Weimar 1788 war Goethe ein verwandelter Mensch. Er zog sich weitgehend aus den Regierungsgeschäften zurück und begann eine Lebensgemeinschaft mit Christiane Vulpius, die er erst 1806 heiratete. Die Beziehung zu Charlotte von Stein zerbrach. In den »Römischen Elegien« — einer Sammlung erotisch-elegischer Gedichte in antiker Form — feierte er die sinnliche Erfahrung Italiens und seiner neuen Liebe.</p>
+      <p>Nach seiner Rückkehr nach Weimar 1788 war Goethe ein verwandelter Mensch. Er zog sich weitgehend aus den Regierungsgeschäften zurück und wandte sich ganz der Kunst und Wissenschaft zu. Die Beziehung zu Charlotte von Stein zerbrach. In den »Römischen Elegien« — einer Sammlung erotisch-elegischer Gedichte in antiker Form — feierte er die sinnliche Erfahrung Italiens und einer neuen Liebe.</p>
     </div>
   </div>
+</section>
+
+<!-- ═══════════════ CHRISTIANE & FAMILIE ═══════════════ -->
+<section class="bio-section">
+  <div class="side-decoration left"></div>
+  <div class="section-inner reveal">
+    <span class="section-label">Liebe und Familie</span>
+    <h2 class="section-title">Christiane Vulpius und die Kinder</h2>
+    <span class="section-date">1788 – 1830</span>
+    <div class="bio-text">
+      <p>Im Juli 1788 — wenige Wochen nach seiner Rückkehr aus Italien — begegnete Goethe im Park an der Ilm der 23-jährigen <strong>Christiane Vulpius</strong> (1765–1816). Die Tochter eines verarmten Beamten und Schwester des Romanautors Christian August Vulpius arbeitete als Blumenmacherin in einer Weimarer Manufaktur. Zwischen dem berühmtesten Dichter Deutschlands und dem einfachen Mädchen aus dem Volk entstand eine Liebesbeziehung, die die Weimarer Gesellschaft zutiefst schockierte.</p>
+
+      <p>Am 25. Dezember 1789 kam ihr Sohn <strong>Julius August Walther</strong> zur Welt — das einzige Kind, das überleben sollte. Vier weitere Kinder — Caroline (1793), ein totgeborener Sohn (1795), Carl (1799) und Catharina (1802) — starben kurz nach oder bei der Geburt. Christiane und Johann Wolfgang lebten achtzehn Jahre in »wilder Ehe« zusammen, bis Goethe sie am 19. Oktober 1806 offiziell heiratete — fünf Tage nachdem französische Soldaten nach der Schlacht bei Jena in sein Haus eingedrungen waren und Christiane durch ihre mutige Besonnenheit das Haus, seine Manuskripte und möglicherweise sein Leben gerettet hatte.</p>
+
+      <p>Christiane — die Goethe zärtlich seine »kleine Erotika« und seinen »Hausschatz« nannte — war eine lebenslustige, praktische Frau, die den Haushalt führte, den Garten pflegte und ihrem Mann den Rücken freihielt. Die Weimarer Gesellschaft verzieh ihr nie ihre Herkunft; selbst Schiller sprach abfällig von ihr. Ihr Tod am 6. Juni 1816 nach schwerem Nierenleiden traf Goethe tief: In sein Tagebuch schrieb er nur: »Sie ist mir endlich entrissen.«</p>
+
+      <p>Sohn <strong>August von Goethe</strong> (1789–1830) studierte Jura und wurde Weimarer Kammerrat, stand aber zeitlebens im übermächtigen Schatten seines Vaters. 1817 heiratete er <strong>Ottilie von Pogwisch</strong> (1796–1872), eine geistreiche junge Adlige, die Goethe drei Enkel schenkte: <strong>Walther</strong> (1818–1885), <strong>Wolfgang</strong> (1820–1883) und <strong>Alma</strong> (1827–1844). August litt unter Alkoholismus und starb am 27. Oktober 1830 während einer Italienreise in Rom — ausgerechnet dort, wo sein Vater die glücklichste Zeit seines Lebens verbracht hatte. Goethe erfuhr die Nachricht gefasst und zitierte Menander: »Non ignoravi me mortalem genuisse« — Ich wusste, dass ich einen Sterblichen gezeugt hatte. Keiner der drei Enkel hatte Nachkommen; mit Walthers Tod 1885 erlosch die direkte Linie Goethes.</p>
+    </div>
+  </div>
+  <div class="side-decoration right"></div>
 </section>
 
 <!-- ═══════════════ PORTRAIT PARALLAX ═══════════════ -->
@@ -2451,17 +2466,17 @@ footer .footer-quote {
 
   // Restore saved theme
   const savedTheme = localStorage.getItem('goethe-theme');
-  if (savedTheme) html.setAttribute('data-theme', savedTheme);
+  if (savedTheme === 'dark') html.setAttribute('data-theme', 'dark');
 
   themeToggle.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    if (next === 'light') {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    if (isDark) {
       html.removeAttribute('data-theme');
+      localStorage.setItem('goethe-theme', 'light');
     } else {
       html.setAttribute('data-theme', 'dark');
+      localStorage.setItem('goethe-theme', 'dark');
     }
-    localStorage.setItem('goethe-theme', next);
   });
 
 })();

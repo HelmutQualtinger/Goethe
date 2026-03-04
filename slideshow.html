@@ -218,6 +218,15 @@ html, body {
 [data-theme="light"] .nav-hint {
   color: #8A7A60;
 }
+/* Light theme: clean slide backgrounds */
+[data-theme="light"] .slide {
+  background: #FAF6F0 !important;
+}
+[data-theme="light"] .slide::before,
+[data-theme="light"] .slide::after {
+  opacity: 0.04;
+  background: linear-gradient(to bottom, #A08030, transparent);
+}
 
 /* ═══ CUSTOM CURSOR ═══ */
 .cursor {
@@ -263,6 +272,7 @@ html, body {
 .slide .slide-content {
   opacity: 0;
   transform: translateY(30px);
+  max-height: 100%;
 }
 @keyframes slideIn {
   to { opacity: 1; transform: translateY(0); }
@@ -280,35 +290,24 @@ html, body {
   animation: slideIn 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
-/* ═══ BACKGROUNDS ═══ */
+/* ═══ BACKGROUNDS — clean solid colors for projection ═══ */
 .bg-dark {
-  background: radial-gradient(ellipse 120% 80% at 50% 50%, var(--charcoal-warm) 0%, var(--ink) 100%);
+  background: var(--ink);
 }
 .bg-green {
-  background: radial-gradient(ellipse 120% 80% at 40% 50%, var(--green-deep) 0%, var(--ink) 100%);
+  background: linear-gradient(160deg, var(--green-deep) 0%, var(--ink) 100%);
 }
 .bg-burgundy {
-  background: radial-gradient(ellipse 100% 70% at 60% 50%, var(--burgundy-dark) 0%, var(--ink) 100%);
+  background: linear-gradient(160deg, var(--burgundy-dark) 0%, var(--ink) 100%);
 }
 .bg-warm {
-  background: radial-gradient(ellipse 110% 80% at 50% 40%, #1E1810 0%, var(--ink) 100%);
+  background: linear-gradient(160deg, #1E1810 0%, var(--ink) 100%);
 }
 .bg-gold-accent {
-  background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(212, 184, 92, 0.06) 0%, transparent 70%),
-              radial-gradient(ellipse 120% 80% at 50% 50%, var(--charcoal-warm) 0%, var(--ink) 100%);
+  background: var(--charcoal-warm);
 }
 
-/* Subtle noise overlay */
-.slideshow::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 100;
-  opacity: 0.02;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px;
-}
+/* Noise overlay removed — caused visual artifacts on projection */
 
 /* ═══ TYPOGRAPHY — PROJECTION OPTIMIZED ═══ */
 h1 {
@@ -405,10 +404,19 @@ h3 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1.5vh;
   width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 184, 92, 0.3) transparent;
+  padding-right: 1vw;
 }
+.left-col::-webkit-scrollbar { width: 6px; }
+.left-col::-webkit-scrollbar-track { background: transparent; }
+.left-col::-webkit-scrollbar-thumb { background: rgba(212, 184, 92, 0.3); border-radius: 3px; }
+.left-col::-webkit-scrollbar-thumb:hover { background: rgba(212, 184, 92, 0.5); }
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -509,6 +517,21 @@ h3 {
   background: var(--ink);
 }
 @keyframes wheelSpin { to { transform: rotate(360deg); } }
+
+/* ═══ GOETHE PORTRAIT ═══ */
+.goethe-portrait {
+  width: min(32vh, 28vw);
+  height: min(44vh, 38vw);
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 3px solid var(--gold-dim);
+  box-shadow: 0 0 0 8px var(--ink), 0 0 0 10px rgba(212, 184, 92, 0.2), 0 8px 40px rgba(0,0,0,0.5);
+}
+[data-theme="light"] .goethe-portrait {
+  border-color: #A08030;
+  box-shadow: 0 0 0 8px #FAF6F0, 0 0 0 10px rgba(160, 128, 48, 0.25), 0 8px 40px rgba(0,0,0,0.12);
+}
 
 /* ═══ 3D BOOK ═══ */
 .book-3d {
@@ -1010,11 +1033,16 @@ h3 {
 
 <!-- ══════════ SLIDE 1: TITLE ══════════ -->
 <div class="slide bg-dark active" data-index="0">
-  <div class="slide-content center-col">
-    <span class="label stagger-1">Dichter · Denker · Naturforscher</span>
-    <h1 class="stagger-2" style="margin: 1vh 0;">Johann Wolfgang<br><span style="font-weight:400; font-style:italic; font-size:0.55em; color: var(--gold-light);">von</span><br>Goethe</h1>
-    <div class="date-text stagger-3" style="font-size: clamp(1.5rem, 2.5vw, 2.5rem);">1749 — 1832</div>
-    <div class="divider stagger-4" style="margin-top: 2vh;"></div>
+  <div class="slide-content" style="display:flex; align-items:center; justify-content:center; gap:6vw; padding:4vh 6vw;">
+    <div class="goethe-portrait stagger-1">
+      <img src="img/goethe-stieler.jpg" alt="Johann Wolfgang von Goethe — Gemälde von Joseph Karl Stieler, 1828" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+    </div>
+    <div style="text-align:left;">
+      <span class="label stagger-2">Dichter · Denker · Naturforscher</span>
+      <h1 class="stagger-3" style="margin: 1vh 0;">Johann Wolfgang<br><span style="font-weight:400; font-style:italic; font-size:0.55em; color: var(--gold-light);">von</span><br>Goethe</h1>
+      <div class="date-text stagger-4" style="font-size: clamp(1.5rem, 2.5vw, 2.5rem);">1749 — 1832</div>
+      <div class="divider stagger-5" style="margin-top: 2vh;"></div>
+    </div>
   </div>
 </div>
 
@@ -1032,35 +1060,46 @@ h3 {
     <span class="label stagger-1">Kapitel I</span>
     <h2 class="stagger-2">Kindheit und Jugend<br>in Frankfurt</h2>
     <span class="date-text stagger-3">1749 – 1765</span>
-    <p class="body-text stagger-4">Geboren am 28. August 1749 als Sohn des kaiserlichen Rates Johann Caspar Goethe und Catharina Elisabeth Textor. Umfassende Bildung durch Privatlehrer in Sprachen, Zeichenkunst, Musik und Naturwissenschaften. Frühe Leidenschaft für Literatur und Theater.</p>
-    <p class="body-text stagger-5" style="font-style:italic; color: var(--gold-light); font-size: clamp(1.2rem, 1.8vw, 1.8rem);">»Vom Vater hab ich die Statur, des Lebens ernstes Führen, vom Mütterchen die Frohnatur und Lust zu fabulieren.«</p>
+    <p class="body-text stagger-4">Geboren am 28. August 1749 in Frankfurt am Main als erstes Kind des kaiserlichen Rates Johann Caspar Goethe (1710–1782) und Catharina Elisabeth, geb. Textor (1731–1808), Tochter des Frankfurter Stadtschultheißen. Das Elternhaus am Großen Hirschgraben — wohlhabend, gebildet, mit einer Bibliothek von über 2.000 Bänden.</p>
+    <p class="body-text stagger-5">Umfassende Bildung durch Privatlehrer: Latein, Griechisch, Französisch, Italienisch, Englisch, Hebräisch, Zeichenkunst, Musik, Reiten, Fechten. Frühe Leidenschaft für Literatur und das Frankfurter Theater. Das Erdbeben von Lissabon (1755) und die französische Besatzung im Siebenjährigen Krieg prägen den jungen Goethe tief.</p>
+    <p class="body-text stagger-6" style="font-style:italic; color: var(--gold-light); font-size: clamp(1.2rem, 1.8vw, 1.8rem);">»Vom Vater hab ich die Statur, des Lebens ernstes Führen, vom Mütterchen die Frohnatur und Lust zu fabulieren.«</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 3b: FAMILIE ══════════ -->
+<div class="slide bg-dark" data-index="3">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Die Familie Goethe</span>
+    <h2 class="stagger-2">Geschwister und Eltern</h2>
+    <p class="body-text stagger-3">Von sechs Geschwistern überlebten nur Johann Wolfgang und seine ein Jahr jüngere Schwester <strong>Cornelia</strong> (1750–1777) das Kindesalter. Die vier anderen — Hermann Jacob, Catharina Elisabeth, Johanna Maria und Georg Adolph — starben im Säuglingsalter. Cornelia war Goethes engste Vertraute der Jugend: hochbegabt, sprachgewandt, leidenschaftlich. Ihre Zwangsheirat mit Johann Georg Schlosser und ihr früher Tod mit nur 26 Jahren erschütterten ihn zutiefst.</p>
+    <p class="body-text stagger-4">Der Vater — streng, pedantisch, ehrgeizig — legte den Grundstein für Goethes enzyklopädische Bildung. Die Mutter — warmherzig, phantasievoll, eine begnadete Geschichtenerzählerin — wurde in Frankfurt liebevoll »Frau Aja« genannt und stand bis ins hohe Alter in herzlichem Briefwechsel mit dem Sohn.</p>
   </div>
 </div>
 
 <!-- ══════════ SLIDE 4: STUDIUM ══════════ -->
-<div class="slide bg-dark" data-index="3">
+<div class="slide bg-green" data-index="4">
   <div class="slide-content left-col">
     <span class="label stagger-1">Kapitel II</span>
     <h2 class="stagger-2">Leipzig und Straßburg</h2>
     <span class="date-text stagger-3">1765 – 1771</span>
-    <p class="body-text stagger-4">Jurastudium in Leipzig — dem »kleinen Paris«. Poetik bei Gellert, Zeichenunterricht bei Oeser. Erste Liebesgedichte an Käthchen Schönkopf. In Straßburg die schicksalhafte Begegnung mit Herder: Shakespeare, Homer, Volkspoesie.</p>
-    <p class="body-text stagger-5">Die Liebe zu Friederike Brion inspiriert die »Sesenheimer Lieder« — der Durchbruch zur modernen Erlebnislyrik.</p>
+    <p class="body-text stagger-4">Jurastudium in Leipzig — dem »kleinen Paris«. Poetik bei Gellert, Zeichenunterricht bei Adam Friedrich Oeser. Die Liebe zu Anna Katharina (»Käthchen«) Schönkopf inspiriert erste Gedichte, doch die Beziehung zerbricht. 1768 ein schwerer Blutsturz — Goethe kehrt todkrank nach Frankfurt zurück.</p>
+    <p class="body-text stagger-5">Nach der Genesung 1770 Fortsetzung des Studiums in Straßburg. Die schicksalhafte Begegnung mit Johann Gottfried Herder öffnet die Augen für Shakespeare, Homer, Ossian und die Volkspoesie. Die Liebe zur Pfarrerstochter Friederike Brion in Sesenheim inspiriert die »Sesenheimer Lieder« — Mailied, Willkommen und Abschied — der Durchbruch zur modernen Erlebnislyrik. 1771 Promotion zum Licentiatus Juris.</p>
   </div>
 </div>
 
 <!-- ══════════ SLIDE 5: STURM UND DRANG ══════════ -->
-<div class="slide bg-burgundy" data-index="4">
+<div class="slide bg-burgundy" data-index="5">
   <div class="slide-content left-col">
     <span class="label stagger-1">Kapitel III</span>
     <h2 class="stagger-2">Sturm und Drang</h2>
     <span class="date-text stagger-3">1771 – 1775</span>
-    <p class="body-text stagger-4">»Götz von Berlichingen« (1773) wird zum Manifest der Bewegung. »Die Leiden des jungen Werthers« (1774) erschüttert Europa — ein Sensationserfolg ohnegleichen. Napoleon liest es siebenmal. Erste Entwürfe zum »Faust«.</p>
-    <p class="body-text stagger-5">Die Hymnen »Prometheus« und »Ganymed« zeigen einen Dichter auf dem Höhepunkt jugendlicher Schöpferkraft.</p>
+    <p class="body-text stagger-4">Anwalt in Frankfurt, doch die Dichtung siegt. »Götz von Berlichingen« (1773) wird zum Manifest der Bewegung. »Die Leiden des jungen Werthers« (1774) erschüttert ganz Europa — ein Sensationserfolg ohnegleichen. Napoleon liest es siebenmal. Eine Welle von Nachahmungssuiziden — das »Werther-Fieber« — löst die erste Mediendebatte der Geschichte aus.</p>
+    <p class="body-text stagger-5">Verlobung mit Lili Schönemann (1775), der Tochter eines Frankfurter Bankiers — doch das Engagement wird gelöst. Die Hymnen »Prometheus« und »Ganymed« zeigen titanischen Schöpferdrang. Erste Entwürfe zum »Urfaust«. Im November 1775 folgt er der Einladung des jungen Herzogs Carl August nach Weimar — eine Entscheidung für das ganze Leben.</p>
   </div>
 </div>
 
 <!-- ══════════ SLIDE 6: FAUST-ZITAT ══════════ -->
-<div class="slide bg-dark" data-index="5">
+<div class="slide bg-dark" data-index="6">
   <div class="slide-content center-col">
     <div class="quote-text stagger-1">Zwei Seelen wohnen, ach! in meiner Brust, die eine will sich von der andern trennen.</div>
     <div class="quote-source stagger-2">— Faust I, Vers 1112–1113</div>
@@ -1068,40 +1107,62 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 7: WEIMAR ══════════ -->
-<div class="slide bg-green" data-index="6">
+<div class="slide bg-green" data-index="7">
   <div class="slide-content left-col">
     <span class="label stagger-1">Kapitel IV</span>
     <h2 class="stagger-2">Weimar</h2>
     <span class="date-text stagger-3">1775 – 1786</span>
-    <p class="body-text stagger-4">Einladung durch Herzog Carl August. Übernahme von Regierungsämtern: Bergbau, Finanzen, Wegebau. 1782 Erhebung in den Adelsstand. Die Beziehung zu Charlotte von Stein — über 1.700 Briefe bezeugen eine Liebe von seltener Tiefe.</p>
-    <p class="body-text stagger-5">Der stürmische Genius reift zum klassischen Künstler — doch die Regierungsgeschäfte zehren an der Schöpferkraft.</p>
+    <p class="body-text stagger-4">Der 26-jährige Goethe wird engster Berater des erst 18-jährigen Herzogs Carl August. Übernahme von Regierungsämtern: Bergbau, Straßenbau, Finanzen, Kriegskommission. 1782 Erhebung in den Adelsstand. Die Beziehung zu Charlotte von Stein (1742–1827) — über 1.700 Briefe bezeugen eine Seelenliebe von seltener Intensität, die ihn seelisch verwandelt.</p>
+    <p class="body-text stagger-5">Er richtet sein Gartenhaus an der Ilm ein, leitet das Weimarer Hoftheater, erforscht die Geologie des Thüringer Waldes und entdeckt 1784 den menschlichen Zwischenkieferknochen. Doch zehn Jahre Regierungsgeschäfte zehren an der Schöpferkraft — die Flucht nach Italien wird zur Notwendigkeit.</p>
   </div>
 </div>
 
 <!-- ══════════ SLIDE 8: ITALIEN ══════════ -->
-<div class="slide bg-warm" data-index="7">
+<div class="slide bg-warm" data-index="8">
   <div class="slide-content left-col">
     <span class="label stagger-1">Die Wiedergeburt</span>
     <h2 class="stagger-2">Italienische Reise</h2>
     <span class="date-text stagger-3">1786 – 1788</span>
-    <p class="body-text stagger-4">Am 3. September 1786 bricht Goethe heimlich nach Italien auf. In Rom, Neapel und Sizilien studiert er die Antike, zeichnet, vollendet »Iphigenie auf Tauris« in Versform. Arbeitet am »Egmont« und »Tasso«.</p>
+    <p class="body-text stagger-4">Am 3. September 1786 bricht Goethe unter falschem Namen heimlich nach Italien auf. Über den Brenner nach Verona, Venedig, Rom, Neapel, Sizilien. In Rom lebt er unter Künstlern, studiert die Antike, zeichnet unablässig. Vollendet »Iphigenie auf Tauris« in jambischen Fünfhebern, arbeitet am »Egmont«, »Tasso« und der »Faust«-Konzeption.</p>
     <p class="body-text stagger-5" style="font-style:italic; color: var(--gold-light); font-size: clamp(1.2rem, 1.8vw, 1.8rem);">»Ich zähle meinen zweiten Geburtstag, eine wahre Wiedergeburt, von dem Tage, da ich Rom betrat.«</p>
   </div>
 </div>
 
-<!-- ══════════ SLIDE 9: SCHILLER ══════════ -->
-<div class="slide bg-dark" data-index="8">
+<!-- ══════════ SLIDE 9: CHRISTIANE ══════════ -->
+<div class="slide bg-burgundy" data-index="9">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Liebe und Familie</span>
+    <h2 class="stagger-2">Christiane Vulpius</h2>
+    <span class="date-text stagger-3">1788 – 1816</span>
+    <p class="body-text stagger-4">Im Juli 1788 — wenige Wochen nach der Rückkehr aus Italien — begegnet Goethe der 23-jährigen <strong>Christiane Vulpius</strong> (1765–1816) im Park an der Ilm. Die Arbeitertochter und Blumenmacherin wird seine Lebensgefährtin — gegen alle Konventionen der Weimarer Gesellschaft. Charlotte von Stein bricht den Kontakt ab.</p>
+    <p class="body-text stagger-5">Am 25. Dezember 1789 wird Sohn <strong>August</strong> geboren — das einzige überlebende Kind. Vier weitere Kinder sterben kurz nach der Geburt. Erst 1806, nach der Plünderung Weimars durch napoleonische Truppen — Christiane rettet das Haus und Goethes Manuskripte — heiraten sie offiziell. Die Ehe der »kleinen Erotika«, wie er sie nennt, währt bis zu ihrem Tod 1816. Goethe ist untröstlich.</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 10: SOHN AUGUST ══════════ -->
+<div class="slide bg-dark" data-index="10">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Der Sohn</span>
+    <h2 class="stagger-2">August von Goethe</h2>
+    <span class="date-text stagger-3">1789 – 1830</span>
+    <p class="body-text stagger-4"><strong>Julius August Walther von Goethe</strong> — einziges überlebendes Kind. Wuchs im Schatten des übermächtigen Vaters auf, studierte Jura, wurde Weimarer Kammerrat. 1817 heiratete er <strong>Ottilie von Pogwisch</strong> (1796–1872), die Goethe drei Enkel schenkte: <strong>Walther</strong> (1818–1885), <strong>Wolfgang</strong> (1820–1883) und <strong>Alma</strong> (1827–1844).</p>
+    <p class="body-text stagger-5">August litt unter Alkoholismus und dem Druck, Goethes Sohn zu sein. Er starb am 27. Oktober 1830 in Rom — ausgerechnet dort, wo sein Vater die glücklichste Zeit erlebt hatte. Goethe erfuhr die Nachricht gefasst: »Non ignoravi me mortalem genuisse« — Ich wusste, dass ich einen Sterblichen gezeugt hatte. Keiner der drei Enkel hatte Nachkommen — die Linie erlosch 1885.</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 11: SCHILLER ══════════ -->
+<div class="slide bg-green" data-index="11">
   <div class="slide-content left-col">
     <span class="label stagger-1">Kapitel V</span>
     <h2 class="stagger-2">Goethe und Schiller</h2>
     <span class="date-text stagger-3">1794 – 1805</span>
-    <p class="body-text stagger-4">Die produktivste Dichterfreundschaft der Literaturgeschichte. Zehn Jahre gegenseitiger Inspiration: Balladen, Xenien, Zeitschriften. Gemeinsam entstehen »Der Zauberlehrling«, »Die Kraniche des Ibykus«, und vieles mehr.</p>
-    <p class="body-text stagger-5">Unter Schillers Einfluss treibt Goethe den »Faust« und »Wilhelm Meister« voran. Schillers Tod 1805 trifft ihn zutiefst.</p>
+    <p class="body-text stagger-4">Die produktivste Dichterfreundschaft der Literaturgeschichte. Nach anfänglicher Distanz beginnt 1794 mit Schillers berühmtem Brief über die »Urpflanze« ein Jahrzehnt intensivster gegenseitiger Inspiration: Balladen, Xenien, die Zeitschriften »Die Horen« und »Musenalmanach«. Gemeinsam entstehen »Der Zauberlehrling«, »Die Kraniche des Ibykus«, »Der Ring des Polykrates«.</p>
+    <p class="body-text stagger-5">Unter Schillers Einfluss treibt Goethe den »Faust« und »Wilhelm Meister« voran. Schiller drängt, fordert, begeistert. Sein Tod am 9. Mai 1805 trifft Goethe ins Mark: »Ich dachte mich selbst zu verlieren, und verliere nun einen Freund und in demselben die Hälfte meines Daseins.«</p>
   </div>
 </div>
 
 <!-- ══════════ SLIDE 10: EDEL-ZITAT ══════════ -->
-<div class="slide bg-burgundy" data-index="9">
+<div class="slide bg-burgundy" data-index="12">
   <div class="slide-content center-col">
     <div class="quote-text stagger-1">Edel sei der Mensch, hilfreich und gut!</div>
     <div class="quote-source stagger-2">— Das Göttliche, 1783</div>
@@ -1109,7 +1170,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 11: FAUST ══════════ -->
-<div class="slide bg-dark" data-index="10">
+<div class="slide bg-dark" data-index="13">
   <div class="slide-content two-col" style="perspective: 1000px;">
     <div class="col" style="display:flex; align-items:center; justify-content:center;">
       <div class="book-3d stagger-1">
@@ -1135,7 +1196,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 12: WERKE I ══════════ -->
-<div class="slide bg-warm" data-index="11">
+<div class="slide bg-warm" data-index="14">
   <div class="slide-content left-col">
     <span class="label stagger-1">Werkübersicht</span>
     <h2 class="stagger-2" style="margin-bottom: 2vh;">Prosa und Dramen</h2>
@@ -1165,7 +1226,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 13: WERKE II ══════════ -->
-<div class="slide bg-dark" data-index="12">
+<div class="slide bg-dark" data-index="15">
   <div class="slide-content left-col">
     <span class="label stagger-1">Werkübersicht</span>
     <h2 class="stagger-2" style="margin-bottom: 2vh;">Weitere Meisterwerke</h2>
@@ -1195,7 +1256,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 14: SEHNSUCHT-ZITAT ══════════ -->
-<div class="slide bg-green" data-index="13">
+<div class="slide bg-green" data-index="16">
   <div class="slide-content center-col">
     <div class="quote-text stagger-1">Nur wer die Sehnsucht kennt, weiß, was ich leide!</div>
     <div class="quote-source stagger-2">— Wilhelm Meisters Lehrjahre, Mignon-Lied</div>
@@ -1203,7 +1264,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 15: GEDICHTE I ══════════ -->
-<div class="slide bg-burgundy" data-index="14">
+<div class="slide bg-burgundy" data-index="17">
   <div class="slide-content left-col">
     <span class="label stagger-1">Lyrik und Balladen</span>
     <h2 class="stagger-2" style="margin-bottom: 2vh;">Gedichte</h2>
@@ -1229,7 +1290,7 @@ h3 {
 </div>
 
 <!-- ══════════ ERLKÖNIG (scrollbar, mit Vorlesung) ══════════ -->
-<div class="slide poem-slide bg-dark" data-index="15">
+<div class="slide poem-slide bg-dark" data-index="18">
   <div class="slide-content">
     <div class="poem-slide-header">
       <div class="poem-title-group">
@@ -1320,7 +1381,7 @@ h3 {
 </div>
 
 <!-- ══════════ ZAUBERLEHRLING (scrollbar, mit Vorlesung) ══════════ -->
-<div class="slide poem-slide bg-warm" data-index="16">
+<div class="slide poem-slide bg-warm" data-index="19">
   <div class="slide-content">
     <div class="poem-slide-header">
       <div class="poem-title-group">
@@ -1468,7 +1529,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 16: NACHTLIED-ZITAT ══════════ -->
-<div class="slide bg-dark" data-index="17">
+<div class="slide bg-dark" data-index="20">
   <div class="slide-content center-col">
     <div class="quote-text stagger-1" style="max-width: 16ch;">Über allen Gipfeln ist Ruh.</div>
     <div class="divider stagger-2" style="margin: 2vh 0;"></div>
@@ -1478,7 +1539,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 17: NATURWISSENSCHAFT ══════════ -->
-<div class="slide bg-warm" data-index="18">
+<div class="slide bg-warm" data-index="21">
   <div class="slide-content two-col">
     <div class="col" style="align-items:center; justify-content:center; display:flex;">
       <div class="farben-wheel stagger-1"></div>
@@ -1493,7 +1554,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 18: WISSEN-ZITAT ══════════ -->
-<div class="slide bg-green" data-index="19">
+<div class="slide bg-green" data-index="22">
   <div class="slide-content center-col">
     <div class="quote-text stagger-1">Man sieht nur, was man weiß.</div>
     <div class="quote-source stagger-2">— Gespräch mit Eckermann</div>
@@ -1501,7 +1562,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 19: ZEITSTRAHL I ══════════ -->
-<div class="slide bg-dark" data-index="20">
+<div class="slide bg-dark" data-index="23">
   <div class="slide-content left-col">
     <span class="label stagger-1">Lebensstationen</span>
     <h2 class="stagger-2" style="margin-bottom: 2vh;">Zeitstrahl</h2>
@@ -1518,7 +1579,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 20: ZEITSTRAHL II ══════════ -->
-<div class="slide bg-dark" data-index="21">
+<div class="slide bg-dark" data-index="24">
   <div class="slide-content left-col">
     <span class="label stagger-1">Lebensstationen</span>
     <h2 class="stagger-2" style="margin-bottom: 2vh;">Zeitstrahl</h2>
@@ -1534,7 +1595,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 21: STREBEND-ZITAT ══════════ -->
-<div class="slide bg-burgundy" data-index="22">
+<div class="slide bg-burgundy" data-index="25">
   <div class="slide-content center-col">
     <div class="quote-text stagger-1">Wer immer strebend sich bemüht, den können wir erlösen.</div>
     <div class="quote-source stagger-2">— Faust II, Vers 11936–11937</div>
@@ -1542,7 +1603,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 22: VERMÄCHTNIS ══════════ -->
-<div class="slide bg-green" data-index="23">
+<div class="slide bg-green" data-index="26">
   <div class="slide-content left-col">
     <span class="label stagger-1">Vermächtnis</span>
     <h2 class="stagger-2">Tod und Nachleben</h2>
@@ -1553,7 +1614,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 23: MEHR LICHT ══════════ -->
-<div class="slide bg-dark" data-index="24">
+<div class="slide bg-dark" data-index="27">
   <div class="slide-content center-col">
     <div class="orn stagger-1">✦ ✦ ✦</div>
     <div class="quote-text stagger-2" style="font-size: clamp(4rem, 8vw, 9rem); max-width: none;">Mehr Licht!</div>
@@ -1564,7 +1625,7 @@ h3 {
 </div>
 
 <!-- ══════════ SLIDE 24: SCHLUSS ══════════ -->
-<div class="slide bg-dark" data-index="25">
+<div class="slide bg-dark" data-index="28">
   <div class="slide-content center-col">
     <h1 class="stagger-1" style="font-size: clamp(3rem, 6vw, 6rem);">Johann Wolfgang<br><span style="font-weight:400; font-style:italic; font-size:0.55em; color: var(--gold-light);">von</span> Goethe</h1>
     <div class="divider stagger-2" style="margin: 2vh 0;"></div>
@@ -1613,8 +1674,8 @@ h3 {
       oldContent.offsetHeight;
       oldContent.style.animation = '';
     }
-    // Reset scroll on poem slides
-    const oldScroll = slides[current].querySelector('.poem-scroll-area');
+    // Reset scroll on scrollable slides
+    const oldScroll = slides[current].querySelector('.poem-scroll-area') || slides[current].querySelector('.left-col');
     if (oldScroll) oldScroll.scrollTop = 0;
 
     current = index;
@@ -1627,9 +1688,16 @@ h3 {
   function next() { goTo(current + 1); }
   function prev() { goTo(current - 1); }
 
-  // Check if current slide is a poem slide with scrollable content
+  // Check if current slide has scrollable content
   function isOnPoemSlide() {
     return slides[current].classList.contains('poem-slide');
+  }
+  function getScrollableArea() {
+    const poem = slides[current].querySelector('.poem-scroll-area');
+    if (poem) return poem;
+    const col = slides[current].querySelector('.left-col');
+    if (col && col.scrollHeight > col.clientHeight + 5) return col;
+    return null;
   }
 
   // Keyboard
@@ -1649,15 +1717,12 @@ h3 {
       } else {
         next();
       }
-    } else if (e.key === 'ArrowDown' && isOnPoemSlide()) {
-      // Scroll poem down
-      const area = slides[current].querySelector('.poem-scroll-area');
-      if (area) area.scrollBy({ top: 150, behavior: 'smooth' });
-      e.preventDefault();
-    } else if (e.key === 'ArrowUp' && isOnPoemSlide()) {
-      const area = slides[current].querySelector('.poem-scroll-area');
-      if (area) area.scrollBy({ top: -150, behavior: 'smooth' });
-      e.preventDefault();
+    } else if (e.key === 'ArrowDown') {
+      const area = getScrollableArea();
+      if (area) { area.scrollBy({ top: 150, behavior: 'smooth' }); e.preventDefault(); }
+    } else if (e.key === 'ArrowUp') {
+      const area = getScrollableArea();
+      if (area) { area.scrollBy({ top: -150, behavior: 'smooth' }); e.preventDefault(); }
     } else if (e.key === 'Home') {
       e.preventDefault();
       goTo(0);
@@ -1678,7 +1743,7 @@ h3 {
 
   // Click navigation — but not on poem scroll area or buttons
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.play-btn') || e.target.closest('.poem-scroll-area')) return;
+    if (e.target.closest('.play-btn') || e.target.closest('.poem-scroll-area') || (getScrollableArea() && e.target.closest('.left-col'))) return;
     if (e.clientX < window.innerWidth / 3) {
       prev();
     } else {
@@ -1695,7 +1760,7 @@ h3 {
     touchStartY = e.changedTouches[0].clientY;
   }, { passive: true });
   document.addEventListener('touchend', (e) => {
-    if (e.target.closest('.play-btn') || e.target.closest('.poem-scroll-area')) return;
+    if (e.target.closest('.play-btn') || e.target.closest('.poem-scroll-area') || (getScrollableArea() && e.target.closest('.left-col'))) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
@@ -1704,24 +1769,21 @@ h3 {
     navHint.style.opacity = '0';
   }, { passive: true });
 
-  // Mouse wheel — on poem slides, scroll the poem; otherwise navigate
+  // Mouse wheel — on scrollable slides, scroll content; otherwise navigate
   let wheelTimeout = null;
   document.addEventListener('wheel', (e) => {
-    if (isOnPoemSlide()) {
-      // Let the poem scroll area handle it naturally
-      const area = slides[current].querySelector('.poem-scroll-area');
-      if (area) {
-        const atTop = area.scrollTop <= 0 && e.deltaY < 0;
-        const atBottom = area.scrollTop + area.clientHeight >= area.scrollHeight - 5 && e.deltaY > 0;
-        if (atTop || atBottom) {
-          e.preventDefault();
-          if (wheelTimeout) return;
-          if (atBottom) next(); else if (atTop) prev();
-          wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 600);
-        }
-        // Otherwise let natural scroll happen
-        return;
+    const area = getScrollableArea();
+    if (area) {
+      const atTop = area.scrollTop <= 0 && e.deltaY < 0;
+      const atBottom = area.scrollTop + area.clientHeight >= area.scrollHeight - 5 && e.deltaY > 0;
+      if (atTop || atBottom) {
+        e.preventDefault();
+        if (wheelTimeout) return;
+        if (atBottom) next(); else if (atTop) prev();
+        wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 600);
       }
+      // Otherwise let natural scroll happen
+      return;
     }
     e.preventDefault();
     if (wheelTimeout) return;
@@ -1988,11 +2050,14 @@ h3 {
     { title: 'Titelfolie',              type: '' },
     { title: '»Es ist nicht genug…«',   type: 'Zitat', quote: true },
     { title: 'Kindheit in Frankfurt',    type: 'Leben' },
+    { title: 'Geschwister & Eltern',     type: 'Leben' },
     { title: 'Leipzig & Straßburg',      type: 'Leben' },
     { title: 'Sturm und Drang',         type: 'Leben' },
     { title: '»Zwei Seelen…«',          type: 'Zitat', quote: true },
     { title: 'Weimar',                  type: 'Leben' },
     { title: 'Italienische Reise',      type: 'Leben' },
+    { title: 'Christiane Vulpius',      type: 'Leben' },
+    { title: 'August von Goethe',       type: 'Leben' },
     { title: 'Goethe & Schiller',       type: 'Leben' },
     { title: '»Edel sei der Mensch…«',  type: 'Zitat', quote: true },
     { title: 'Faust',                   type: 'Werk' },
