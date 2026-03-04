@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goethe — Slideshow</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #F5F0E8;
+  --cream-dark: #E8E0D0;
+  --gold: #D4B85C;
+  --gold-light: #E0CC80;
+  --gold-dim: #8A7A40;
+  --green-deep: #1A2E1A;
+  --green-dark: #0F1C0F;
+  --burgundy: #7B2D3E;
+  --burgundy-dark: #4A1525;
+  --charcoal: #111111;
+  --charcoal-warm: #1A1714;
+  --ink: #0A0806;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background: var(--ink);
+  color: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+}
+
+/* ═══ CUSTOM CURSOR ═══ */
+.cursor {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transition: transform 0.15s ease, opacity 0.3s;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+
+/* ═══ SLIDE CONTAINER ═══ */
+.slideshow {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 8vw;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.7s;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Slide inner content animation */
+.slide.active .slide-content {
+  animation: slideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+.slide .slide-content {
+  opacity: 0;
+  transform: translateY(30px);
+}
+@keyframes slideIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Staggered children */
+.slide.active .stagger-1 { animation-delay: 0.1s; }
+.slide.active .stagger-2 { animation-delay: 0.25s; }
+.slide.active .stagger-3 { animation-delay: 0.4s; }
+.slide.active .stagger-4 { animation-delay: 0.55s; }
+.slide.active .stagger-5 { animation-delay: 0.7s; }
+.slide.active [class*="stagger-"] {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* ═══ BACKGROUNDS ═══ */
+.bg-dark {
+  background: radial-gradient(ellipse 120% 80% at 50% 50%, var(--charcoal-warm) 0%, var(--ink) 100%);
+}
+.bg-green {
+  background: radial-gradient(ellipse 120% 80% at 40% 50%, var(--green-deep) 0%, var(--ink) 100%);
+}
+.bg-burgundy {
+  background: radial-gradient(ellipse 100% 70% at 60% 50%, var(--burgundy-dark) 0%, var(--ink) 100%);
+}
+.bg-warm {
+  background: radial-gradient(ellipse 110% 80% at 50% 40%, #1E1810 0%, var(--ink) 100%);
+}
+.bg-gold-accent {
+  background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(212, 184, 92, 0.06) 0%, transparent 70%),
+              radial-gradient(ellipse 120% 80% at 50% 50%, var(--charcoal-warm) 0%, var(--ink) 100%);
+}
+
+/* Subtle noise overlay */
+.slideshow::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* ═══ TYPOGRAPHY — PROJECTION OPTIMIZED ═══ */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 800;
+  line-height: 1.0;
+  color: var(--cream);
+  letter-spacing: -0.01em;
+}
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cream);
+}
+h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--gold);
+}
+
+.label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.9rem, 1.3vw, 1.4rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.body-text {
+  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+  line-height: 1.65;
+  color: var(--cream-dark);
+  font-weight: 400;
+  max-width: 52ch;
+}
+
+.date-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  color: var(--gold);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ═══ QUOTE SLIDES ═══ */
+.quote-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 4.5vw, 4.5rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--cream);
+  max-width: 20ch;
+  text-align: center;
+  position: relative;
+}
+.quote-text::before {
+  content: '„';
+  font-size: 1.5em;
+  color: var(--gold);
+  opacity: 0.3;
+  position: absolute;
+  top: -0.4em;
+  left: -0.4em;
+  line-height: 1;
+}
+.quote-source {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  color: var(--gold-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* ═══ LAYOUT HELPERS ═══ */
+.center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5vh;
+  width: 100%;
+}
+.left-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.5vh;
+  width: 100%;
+}
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6vw;
+  width: 100%;
+  align-items: center;
+}
+.two-col .col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+}
+
+/* ═══ WERK CARDS ═══ */
+.werk-grid-slide {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5vh 4vw;
+  width: 100%;
+}
+.werk-item {
+  border-left: 3px solid var(--gold);
+  padding-left: 1.5vw;
+}
+.werk-item h3 {
+  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+  margin-bottom: 0.3vh;
+}
+.werk-item .werk-year {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 1.4vw, 1.4rem);
+  color: var(--gold-dim);
+  font-style: italic;
+}
+.werk-item .werk-desc {
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  color: var(--cream-dark);
+  line-height: 1.5;
+  margin-top: 0.5vh;
+}
+
+/* ═══ GEDICHT CARDS ═══ */
+.gedicht-item {
+  border-left: 2px solid rgba(212, 184, 92, 0.3);
+  padding-left: 1.5vw;
+}
+.gedicht-item h3 {
+  font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+}
+.gedicht-excerpt {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.55;
+  margin-top: 0.8vh;
+}
+
+/* ═══ TIMELINE ITEMS ═══ */
+.timeline-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2vw;
+  padding: 1vh 0;
+  border-bottom: 1px solid rgba(212, 184, 92, 0.08);
+}
+.timeline-row:last-child { border-bottom: none; }
+.timeline-year {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 2vw, 2rem);
+  color: var(--gold);
+  font-weight: 700;
+  min-width: 6ch;
+  flex-shrink: 0;
+}
+.timeline-event {
+  font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+  color: var(--cream-dark);
+  line-height: 1.4;
+}
+
+/* ═══ FARBENLEHRE WHEEL ═══ */
+.farben-wheel {
+  width: min(35vh, 35vw);
+  height: min(35vh, 35vw);
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #E63946, #F4A261, #E9C46A, #2A9D8F, #264653, #6A4C93, #E63946);
+  box-shadow: 0 0 0 8px var(--ink), 0 0 0 10px rgba(212, 184, 92, 0.2), 0 0 80px rgba(212, 184, 92, 0.1);
+  animation: wheelSpin 40s linear infinite;
+  position: relative;
+  flex-shrink: 0;
+}
+.farben-wheel::before {
+  content: '';
+  position: absolute;
+  inset: 32%;
+  border-radius: 50%;
+  background: var(--ink);
+}
+@keyframes wheelSpin { to { transform: rotate(360deg); } }
+
+/* ═══ 3D BOOK ═══ */
+.book-3d {
+  width: min(28vh, 22vw);
+  height: min(38vh, 30vw);
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-20deg) rotateX(5deg);
+  animation: bookFloat 6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes bookFloat {
+  0%, 100% { transform: rotateY(-20deg) rotateX(5deg) translateY(0); }
+  50% { transform: rotateY(-15deg) rotateX(3deg) translateY(-10px); }
+}
+.book-cover {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 80%);
+  border-radius: 2px 10px 10px 2px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.4), inset -3px 0 8px rgba(0,0,0,0.2);
+  transform: translateZ(16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(212, 184, 92, 0.25);
+  padding: 1.5rem;
+}
+.book-cover .bc-border {
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(212, 184, 92, 0.3);
+  border-radius: 0 8px 8px 0;
+}
+.book-cover h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  color: var(--gold);
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+.book-cover .bc-author {
+  font-size: clamp(0.7rem, 1vw, 1rem);
+  color: var(--gold-light);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+.book-spine {
+  position: absolute;
+  left: -31px;
+  top: 0;
+  width: 32px;
+  height: 100%;
+  background: linear-gradient(90deg, #2A0A15, var(--burgundy-dark) 40%, #2A0A15);
+  transform: rotateY(-90deg);
+  transform-origin: right center;
+  border-radius: 2px 0 0 2px;
+}
+.book-pages {
+  position: absolute;
+  right: 2px;
+  top: 3px;
+  width: 28px;
+  height: calc(100% - 6px);
+  background: repeating-linear-gradient(90deg, var(--cream) 0px, var(--cream) 2px, var(--cream-dark) 2px, var(--cream-dark) 3px);
+  transform: translateZ(-1px);
+  border-radius: 0 2px 2px 0;
+}
+.book-back {
+  position: absolute;
+  inset: 0;
+  background: #1A0810;
+  border-radius: 2px 10px 10px 2px;
+  transform: translateZ(-16px);
+}
+
+/* ═══ SVG PORTRAIT ═══ */
+.portrait-silhouette {
+  width: min(40vh, 30vw);
+  height: min(50vh, 38vw);
+  flex-shrink: 0;
+  opacity: 0.15;
+}
+
+/* ═══ POEM SLIDES (scrollable) ═══ */
+.slide.poem-slide {
+  align-items: stretch;
+  padding: 0;
+}
+.slide.poem-slide .slide-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.poem-slide-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3vh 8vw 2vh;
+  border-bottom: 1px solid rgba(212, 184, 92, 0.1);
+}
+.poem-slide-header .poem-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5vw;
+}
+.poem-slide-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  color: var(--cream);
+  font-weight: 700;
+}
+.poem-slide-header .poem-year-label {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  color: var(--gold-dim);
+  font-style: italic;
+}
+.poem-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 3vh 8vw 6vh;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 184, 92, 0.3) transparent;
+}
+.poem-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+.poem-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+.poem-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(212, 184, 92, 0.25);
+  border-radius: 3px;
+}
+.poem-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 184, 92, 0.45);
+}
+.poem-verses-body {
+  max-width: 700px;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.25rem, 1.9vw, 1.9rem);
+  font-style: italic;
+  line-height: 1.75;
+  color: var(--cream);
+}
+.poem-verses-body .stanza {
+  margin-bottom: 2.5vh;
+  padding-left: 1.5vw;
+  border-left: 2px solid rgba(212, 184, 92, 0.12);
+  transition: border-color 0.4s, background 0.4s;
+}
+.poem-verses-body .stanza.speaking {
+  border-left-color: var(--gold);
+  background: rgba(212, 184, 92, 0.04);
+  padding: 0.5vh 0 0.5vh 1.5vw;
+}
+.poem-verses-body .speaker-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.7rem, 0.95vw, 0.95rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.4vh;
+}
+/* Speaker colors */
+.poem-verses-body .speaker-label[data-voice="erzaehler"] { color: var(--cream-dark); }
+.poem-verses-body .speaker-label[data-voice="vater"] { color: #7AAECC; }
+.poem-verses-body .speaker-label[data-voice="sohn"] { color: #E0A870; }
+.poem-verses-body .speaker-label[data-voice="erlkoenig"] { color: #C46B7B; }
+.poem-verses-body .speaker-label[data-voice="lehrling"] { color: var(--gold-light); }
+.poem-verses-body .speaker-label[data-voice="meister"] { color: #88B888; }
+
+/* Play button */
+.play-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6vw;
+  background: none;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.6em 1.4em;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+.play-btn:hover {
+  background: rgba(212, 184, 92, 0.1);
+  border-color: var(--gold);
+}
+.play-btn.playing {
+  border-color: #C46B7B;
+  color: #C46B7B;
+}
+.play-btn .play-icon {
+  font-size: 1.1em;
+  line-height: 1;
+}
+.poem-note-footer {
+  flex-shrink: 0;
+  padding: 1.5vh 8vw 2.5vh;
+  border-top: 1px solid rgba(212, 184, 92, 0.08);
+  font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+  color: var(--gold-dim);
+  font-style: italic;
+}
+
+/* ═══ ORNAMENTS ═══ */
+.orn {
+  color: var(--gold);
+  opacity: 0.25;
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  letter-spacing: 0.6em;
+}
+.divider {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.4;
+}
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--burgundy));
+  z-index: 9999;
+  transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ═══ SLIDE COUNTER ═══ */
+.slide-counter {
+  position: fixed;
+  bottom: 2vh;
+  right: 3vw;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+  color: var(--gold-dim);
+  z-index: 9998;
+  letter-spacing: 0.1em;
+  user-select: none;
+}
+
+/* ═══ NAV HINT ═══ */
+.nav-hint {
+  position: fixed;
+  bottom: 2vh;
+  left: 3vw;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.75rem, 1vw, 1rem);
+  color: var(--gold-dim);
+  opacity: 0.4;
+  z-index: 9998;
+  letter-spacing: 0.1em;
+  user-select: none;
+  transition: opacity 0.5s;
+}
+
+/* Side decorative lines */
+.slide::before {
+  content: '';
+  position: absolute;
+  top: 8vh;
+  left: 4vw;
+  width: 1px;
+  height: 15vh;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  opacity: 0.08;
+}
+.slide::after {
+  content: '';
+  position: absolute;
+  bottom: 8vh;
+  right: 4vw;
+  width: 1px;
+  height: 15vh;
+  background: linear-gradient(to top, var(--gold), transparent);
+  opacity: 0.08;
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+<div class="nav-hint" id="navHint">← → Navigieren · Leertaste = Vorlesen · F = Vollbild</div>
+
+<div class="slideshow" id="slideshow">
+
+<!-- ══════════ SLIDE 1: TITLE ══════════ -->
+<div class="slide bg-dark active" data-index="0">
+  <div class="slide-content center-col">
+    <span class="label stagger-1">Dichter · Denker · Naturforscher</span>
+    <h1 class="stagger-2" style="margin: 1vh 0;">Johann Wolfgang<br><span style="font-weight:400; font-style:italic; font-size:0.55em; color: var(--gold-light);">von</span><br>Goethe</h1>
+    <div class="date-text stagger-3" style="font-size: clamp(1.5rem, 2.5vw, 2.5rem);">1749 — 1832</div>
+    <div class="divider stagger-4" style="margin-top: 2vh;"></div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 2: ERÖFFNUNGSZITAT ══════════ -->
+<div class="slide bg-green" data-index="1">
+  <div class="slide-content center-col">
+    <div class="quote-text stagger-1">Es ist nicht genug, zu wissen, man muß auch anwenden; es ist nicht genug, zu wollen, man muß auch tun.</div>
+    <div class="quote-source stagger-2">— Wilhelm Meisters Wanderjahre</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 3: KINDHEIT ══════════ -->
+<div class="slide bg-warm" data-index="2">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Kapitel I</span>
+    <h2 class="stagger-2">Kindheit und Jugend<br>in Frankfurt</h2>
+    <span class="date-text stagger-3">1749 – 1765</span>
+    <p class="body-text stagger-4">Geboren am 28. August 1749 als Sohn des kaiserlichen Rates Johann Caspar Goethe und Catharina Elisabeth Textor. Umfassende Bildung durch Privatlehrer in Sprachen, Zeichenkunst, Musik und Naturwissenschaften. Frühe Leidenschaft für Literatur und Theater.</p>
+    <p class="body-text stagger-5" style="font-style:italic; color: var(--gold-light); font-size: clamp(1.2rem, 1.8vw, 1.8rem);">»Vom Vater hab ich die Statur, des Lebens ernstes Führen, vom Mütterchen die Frohnatur und Lust zu fabulieren.«</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 4: STUDIUM ══════════ -->
+<div class="slide bg-dark" data-index="3">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Kapitel II</span>
+    <h2 class="stagger-2">Leipzig und Straßburg</h2>
+    <span class="date-text stagger-3">1765 – 1771</span>
+    <p class="body-text stagger-4">Jurastudium in Leipzig — dem »kleinen Paris«. Poetik bei Gellert, Zeichenunterricht bei Oeser. Erste Liebesgedichte an Käthchen Schönkopf. In Straßburg die schicksalhafte Begegnung mit Herder: Shakespeare, Homer, Volkspoesie.</p>
+    <p class="body-text stagger-5">Die Liebe zu Friederike Brion inspiriert die »Sesenheimer Lieder« — der Durchbruch zur modernen Erlebnislyrik.</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 5: STURM UND DRANG ══════════ -->
+<div class="slide bg-burgundy" data-index="4">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Kapitel III</span>
+    <h2 class="stagger-2">Sturm und Drang</h2>
+    <span class="date-text stagger-3">1771 – 1775</span>
+    <p class="body-text stagger-4">»Götz von Berlichingen« (1773) wird zum Manifest der Bewegung. »Die Leiden des jungen Werthers« (1774) erschüttert Europa — ein Sensationserfolg ohnegleichen. Napoleon liest es siebenmal. Erste Entwürfe zum »Faust«.</p>
+    <p class="body-text stagger-5">Die Hymnen »Prometheus« und »Ganymed« zeigen einen Dichter auf dem Höhepunkt jugendlicher Schöpferkraft.</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 6: FAUST-ZITAT ══════════ -->
+<div class="slide bg-dark" data-index="5">
+  <div class="slide-content center-col">
+    <div class="quote-text stagger-1">Zwei Seelen wohnen, ach! in meiner Brust, die eine will sich von der andern trennen.</div>
+    <div class="quote-source stagger-2">— Faust I, Vers 1112–1113</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 7: WEIMAR ══════════ -->
+<div class="slide bg-green" data-index="6">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Kapitel IV</span>
+    <h2 class="stagger-2">Weimar</h2>
+    <span class="date-text stagger-3">1775 – 1786</span>
+    <p class="body-text stagger-4">Einladung durch Herzog Carl August. Übernahme von Regierungsämtern: Bergbau, Finanzen, Wegebau. 1782 Erhebung in den Adelsstand. Die Beziehung zu Charlotte von Stein — über 1.700 Briefe bezeugen eine Liebe von seltener Tiefe.</p>
+    <p class="body-text stagger-5">Der stürmische Genius reift zum klassischen Künstler — doch die Regierungsgeschäfte zehren an der Schöpferkraft.</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 8: ITALIEN ══════════ -->
+<div class="slide bg-warm" data-index="7">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Die Wiedergeburt</span>
+    <h2 class="stagger-2">Italienische Reise</h2>
+    <span class="date-text stagger-3">1786 – 1788</span>
+    <p class="body-text stagger-4">Am 3. September 1786 bricht Goethe heimlich nach Italien auf. In Rom, Neapel und Sizilien studiert er die Antike, zeichnet, vollendet »Iphigenie auf Tauris« in Versform. Arbeitet am »Egmont« und »Tasso«.</p>
+    <p class="body-text stagger-5" style="font-style:italic; color: var(--gold-light); font-size: clamp(1.2rem, 1.8vw, 1.8rem);">»Ich zähle meinen zweiten Geburtstag, eine wahre Wiedergeburt, von dem Tage, da ich Rom betrat.«</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 9: SCHILLER ══════════ -->
+<div class="slide bg-dark" data-index="8">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Kapitel V</span>
+    <h2 class="stagger-2">Goethe und Schiller</h2>
+    <span class="date-text stagger-3">1794 – 1805</span>
+    <p class="body-text stagger-4">Die produktivste Dichterfreundschaft der Literaturgeschichte. Zehn Jahre gegenseitiger Inspiration: Balladen, Xenien, Zeitschriften. Gemeinsam entstehen »Der Zauberlehrling«, »Die Kraniche des Ibykus«, und vieles mehr.</p>
+    <p class="body-text stagger-5">Unter Schillers Einfluss treibt Goethe den »Faust« und »Wilhelm Meister« voran. Schillers Tod 1805 trifft ihn zutiefst.</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 10: EDEL-ZITAT ══════════ -->
+<div class="slide bg-burgundy" data-index="9">
+  <div class="slide-content center-col">
+    <div class="quote-text stagger-1">Edel sei der Mensch, hilfreich und gut!</div>
+    <div class="quote-source stagger-2">— Das Göttliche, 1783</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 11: FAUST ══════════ -->
+<div class="slide bg-dark" data-index="10">
+  <div class="slide-content two-col" style="perspective: 1000px;">
+    <div class="col" style="display:flex; align-items:center; justify-content:center;">
+      <div class="book-3d stagger-1">
+        <div class="book-cover">
+          <div class="bc-border"></div>
+          <div class="orn" style="opacity:0.4; font-size:1rem;">✦ ✦ ✦</div>
+          <h3>Faust<br><span style="font-weight:400; font-size:0.6em;">Eine Tragödie</span></h3>
+          <div class="bc-author">Goethe</div>
+          <div class="orn" style="opacity:0.4; font-size:1rem;">✦ ✦ ✦</div>
+        </div>
+        <div class="book-spine"></div>
+        <div class="book-pages"></div>
+        <div class="book-back"></div>
+      </div>
+    </div>
+    <div class="col">
+      <span class="label stagger-2">Hauptwerk</span>
+      <h2 class="stagger-3" style="font-size: clamp(2.5rem, 4.5vw, 4.5rem);">Faust</h2>
+      <p class="body-text stagger-4">Über 60 Jahre Arbeit. Der Gelehrte Heinrich Faust, unzufrieden mit den Grenzen des Wissens, schließt einen Pakt mit dem Teufel Mephistopheles.</p>
+      <p class="body-text stagger-5" style="font-style:italic; color: var(--gold-light);">Teil I (1808): Die Gretchentragödie.<br>Teil II (1832, postum): Mythologie, Politik, Utopie.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 12: WERKE I ══════════ -->
+<div class="slide bg-warm" data-index="11">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Werkübersicht</span>
+    <h2 class="stagger-2" style="margin-bottom: 2vh;">Prosa und Dramen</h2>
+    <div class="werk-grid-slide">
+      <div class="werk-item stagger-3">
+        <h3>Die Leiden des jungen Werthers</h3>
+        <span class="werk-year">1774 · Briefroman</span>
+        <p class="werk-desc">Europäischer Sensationserfolg. Eine unmögliche Liebe, die im Freitod endet.</p>
+      </div>
+      <div class="werk-item stagger-3">
+        <h3>Wilhelm Meisters Lehrjahre</h3>
+        <span class="werk-year">1795/96 · Bildungsroman</span>
+        <p class="werk-desc">Der prototypische deutsche Bildungsroman. Suche nach Selbstverwirklichung.</p>
+      </div>
+      <div class="werk-item stagger-4">
+        <h3>Die Wahlverwandtschaften</h3>
+        <span class="werk-year">1809 · Roman</span>
+        <p class="werk-desc">Ein chemisches Gleichnis für die Leidenschaften. Freiheit, Bindung und Schicksal.</p>
+      </div>
+      <div class="werk-item stagger-4">
+        <h3>Iphigenie auf Tauris</h3>
+        <span class="werk-year">1787 · Drama</span>
+        <p class="werk-desc">Goethes klassischstes Drama. Humanität bricht den Fluch der Tantaliden.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 13: WERKE II ══════════ -->
+<div class="slide bg-dark" data-index="12">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Werkübersicht</span>
+    <h2 class="stagger-2" style="margin-bottom: 2vh;">Weitere Meisterwerke</h2>
+    <div class="werk-grid-slide">
+      <div class="werk-item stagger-3">
+        <h3>West-östlicher Divan</h3>
+        <span class="werk-year">1819 · Lyriksammlung</span>
+        <p class="werk-desc">Orient trifft Okzident. Inspiriert von Hafis und Marianne von Willemer.</p>
+      </div>
+      <div class="werk-item stagger-3">
+        <h3>Torquato Tasso</h3>
+        <span class="werk-year">1790 · Drama</span>
+        <p class="werk-desc">Der Konflikt zwischen Genialität und gesellschaftlichen Zwängen.</p>
+      </div>
+      <div class="werk-item stagger-4">
+        <h3>Götz von Berlichingen</h3>
+        <span class="werk-year">1773 · Drama</span>
+        <p class="werk-desc">Das Sturm-und-Drang-Drama schlechthin. Freiheit gegen Fürstenwillkür.</p>
+      </div>
+      <div class="werk-item stagger-4">
+        <h3>Dichtung und Wahrheit</h3>
+        <span class="werk-year">1811–33 · Autobiographie</span>
+        <p class="werk-desc">Monumentale Lebensgeschichte — Wahrheit und Erfindung untrennbar verwoben.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 14: SEHNSUCHT-ZITAT ══════════ -->
+<div class="slide bg-green" data-index="13">
+  <div class="slide-content center-col">
+    <div class="quote-text stagger-1">Nur wer die Sehnsucht kennt, weiß, was ich leide!</div>
+    <div class="quote-source stagger-2">— Wilhelm Meisters Lehrjahre, Mignon-Lied</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 15: GEDICHTE I ══════════ -->
+<div class="slide bg-burgundy" data-index="14">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Lyrik und Balladen</span>
+    <h2 class="stagger-2" style="margin-bottom: 2vh;">Gedichte</h2>
+    <div class="werk-grid-slide">
+      <div class="gedicht-item stagger-3">
+        <h3>Erlkönig</h3>
+        <div class="gedicht-excerpt">»Wer reitet so spät durch Nacht und Wind?<br>Es ist der Vater mit seinem Kind;«</div>
+      </div>
+      <div class="gedicht-item stagger-3">
+        <h3>Der Zauberlehrling</h3>
+        <div class="gedicht-excerpt">»Hat der alte Hexenmeister<br>sich doch einmal wegbegeben!«</div>
+      </div>
+      <div class="gedicht-item stagger-4">
+        <h3>Prometheus</h3>
+        <div class="gedicht-excerpt">»Bedecke deinen Himmel, Zeus,<br>mit Wolkendunst!«</div>
+      </div>
+      <div class="gedicht-item stagger-4">
+        <h3>Wandrers Nachtlied II</h3>
+        <div class="gedicht-excerpt">»Über allen Gipfeln ist Ruh,<br>in allen Wipfeln spürest du<br>kaum einen Hauch;«</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ERLKÖNIG (scrollbar, mit Vorlesung) ══════════ -->
+<div class="slide poem-slide bg-dark" data-index="15">
+  <div class="slide-content">
+    <div class="poem-slide-header">
+      <div class="poem-title-group">
+        <h2>Erlkönig</h2>
+        <span class="poem-year-label">1782</span>
+      </div>
+      <button class="play-btn" id="playErlkoenig" onclick="event.stopPropagation(); togglePoem('erlkoenig')">
+        <span class="play-icon">&#9654;</span> Vorlesen
+      </button>
+    </div>
+    <div class="poem-scroll-area" id="erlkoenig-scroll">
+      <div class="poem-verses-body" id="erlkoenig-verses">
+        <div class="stanza" data-voice="erzaehler">
+          <span class="speaker-label" data-voice="erzaehler">Erzähler</span>
+          Wer reitet so spät durch Nacht und Wind?<br>
+          Es ist der Vater mit seinem Kind;<br>
+          Er hat den Knaben wohl in dem Arm,<br>
+          Er faßt ihn sicher, er hält ihn warm.
+        </div>
+        <div class="stanza" data-voice="vater">
+          <span class="speaker-label" data-voice="vater">Vater</span>
+          Mein Sohn, was birgst du so bang dein Gesicht? —
+        </div>
+        <div class="stanza" data-voice="sohn">
+          <span class="speaker-label" data-voice="sohn">Sohn</span>
+          Siehst, Vater, du den Erlkönig nicht?<br>
+          Den Erlenkönig mit Kron' und Schweif? —
+        </div>
+        <div class="stanza" data-voice="vater">
+          <span class="speaker-label" data-voice="vater">Vater</span>
+          Mein Sohn, es ist ein Nebelstreif. —
+        </div>
+        <div class="stanza" data-voice="erlkoenig">
+          <span class="speaker-label" data-voice="erlkoenig">Erlkönig</span>
+          »Du liebes Kind, komm, geh mit mir!<br>
+          Gar schöne Spiele spiel' ich mit dir;<br>
+          Manch bunte Blumen sind an dem Strand,<br>
+          Meine Mutter hat manch gülden Gewand.«
+        </div>
+        <div class="stanza" data-voice="sohn">
+          <span class="speaker-label" data-voice="sohn">Sohn</span>
+          Mein Vater, mein Vater, und hörest du nicht,<br>
+          Was Erlenkönig mir leise verspricht? —
+        </div>
+        <div class="stanza" data-voice="vater">
+          <span class="speaker-label" data-voice="vater">Vater</span>
+          Sei ruhig, bleibe ruhig, mein Kind;<br>
+          In dürren Blättern säuselt der Wind. —
+        </div>
+        <div class="stanza" data-voice="erlkoenig">
+          <span class="speaker-label" data-voice="erlkoenig">Erlkönig</span>
+          »Willst, feiner Knabe, du mit mir gehn?<br>
+          Meine Töchter sollen dich warten schön;<br>
+          Meine Töchter führen den nächtlichen Reihn<br>
+          Und wiegen und tanzen und singen dich ein.«
+        </div>
+        <div class="stanza" data-voice="sohn">
+          <span class="speaker-label" data-voice="sohn">Sohn</span>
+          Mein Vater, mein Vater, und siehst du nicht dort<br>
+          Erlkönigs Töchter am düstern Ort? —
+        </div>
+        <div class="stanza" data-voice="vater">
+          <span class="speaker-label" data-voice="vater">Vater</span>
+          Mein Sohn, mein Sohn, ich seh' es genau:<br>
+          Es scheinen die alten Weiden so grau. —
+        </div>
+        <div class="stanza" data-voice="erlkoenig">
+          <span class="speaker-label" data-voice="erlkoenig">Erlkönig</span>
+          »Ich liebe dich, mich reizt deine schöne Gestalt;<br>
+          Und bist du nicht willig, so brauch' ich Gewalt.«
+        </div>
+        <div class="stanza" data-voice="sohn">
+          <span class="speaker-label" data-voice="sohn">Sohn</span>
+          Mein Vater, mein Vater, jetzt faßt er mich an!<br>
+          Erlkönig hat mir ein Leids getan! —
+        </div>
+        <div class="stanza" data-voice="erzaehler">
+          <span class="speaker-label" data-voice="erzaehler">Erzähler</span>
+          Dem Vater grauset's; er reitet geschwind,<br>
+          Er hält in Armen das ächzende Kind,<br>
+          Erreicht den Hof mit Mühe und Not;<br>
+          In seinen Armen das Kind war tot.
+        </div>
+      </div>
+    </div>
+    <div class="poem-note-footer">Vertont von Franz Schubert (1815). Entstanden für das Singspiel »Die Fischerin«.</div>
+  </div>
+</div>
+
+<!-- ══════════ ZAUBERLEHRLING (scrollbar, mit Vorlesung) ══════════ -->
+<div class="slide poem-slide bg-warm" data-index="16">
+  <div class="slide-content">
+    <div class="poem-slide-header">
+      <div class="poem-title-group">
+        <h2>Der Zauberlehrling</h2>
+        <span class="poem-year-label">1797</span>
+      </div>
+      <button class="play-btn" id="playZauberlehrling" onclick="event.stopPropagation(); togglePoem('zauberlehrling')">
+        <span class="play-icon">&#9654;</span> Vorlesen
+      </button>
+    </div>
+    <div class="poem-scroll-area" id="zauberlehrling-scroll">
+      <div class="poem-verses-body" id="zauberlehrling-verses">
+        <div class="stanza" data-voice="lehrling">
+          <span class="speaker-label" data-voice="lehrling">Lehrling</span>
+          Hat der alte Hexenmeister<br>
+          sich doch einmal wegbegeben!<br>
+          Und nun sollen seine Geister<br>
+          auch nach meinem Willen leben.<br>
+          Seine Wort' und Werke<br>
+          merkt ich und den Brauch,<br>
+          und mit Geistesstärke<br>
+          tu ich Wunder auch.
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Walle! walle<br>
+          Manche Strecke,<br>
+          daß, zum Zwecke,<br>
+          Wasser fließe<br>
+          und mit reichem, vollem Schwalle<br>
+          zu dem Bade sich ergieße.
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Und nun komm, du alter Besen!<br>
+          Nimm die schlechten Lumpenhüllen;<br>
+          bist schon lange Knecht gewesen:<br>
+          nun erfülle meinen Willen!<br>
+          Auf zwei Beinen stehe,<br>
+          oben sei ein Kopf,<br>
+          eile nun und gehe<br>
+          mit dem Wassertopf!
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Walle! walle<br>
+          Manche Strecke,<br>
+          daß, zum Zwecke,<br>
+          Wasser fließe<br>
+          und mit reichem, vollem Schwalle<br>
+          zu dem Bade sich ergieße.
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Seht, er läuft zum Ufer nieder,<br>
+          Wahrlich! ist schon an dem Flusse,<br>
+          und mit Blitzesschnelle wieder<br>
+          ist er hier mit raschem Gusse.<br>
+          Schon zum zweiten Male!<br>
+          Wie das Becken schwillt!<br>
+          Wie sich jede Schale<br>
+          voll mit Wasser füllt!
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Stehe! stehe!<br>
+          denn wir haben<br>
+          deiner Gaben<br>
+          vollgemessen! —<br>
+          Ach, ich merk es! Wehe! wehe!<br>
+          Hab ich doch das Wort vergessen!
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Ach, das Wort, worauf am Ende<br>
+          er das wird, was er gewesen.<br>
+          Ach, er läuft und bringt behende!<br>
+          Wärst du doch der alte Besen!<br>
+          Immer neue Güsse<br>
+          bringt er schnell herein,<br>
+          Ach! und hundert Flüsse<br>
+          stürzen auf mich ein.
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Nein, nicht länger<br>
+          kann ich's lassen;<br>
+          will ihn fassen.<br>
+          Das ist Tücke!<br>
+          Ach! nun wird mir immer bänger!<br>
+          Welche Miene! welche Blicke!
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          O du Ausgeburt der Hölle!<br>
+          Soll das ganze Haus ersaufen?<br>
+          Seh ich über jede Schwelle<br>
+          doch schon Wasserströme laufen.<br>
+          Ein verruchter Besen,<br>
+          der nicht hören will!<br>
+          Stock, der du gewesen,<br>
+          steh doch wieder still!
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Willst's am Ende<br>
+          gar nicht lassen?<br>
+          Will dich fassen,<br>
+          will dich halten<br>
+          und das alte Holz behende<br>
+          mit dem scharfen Beile spalten.
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Seht da kommt er schleppend wieder!<br>
+          Wie ich mich nun auf dich werfe,<br>
+          gleich, o Kobold, liegst du nieder;<br>
+          krachend trifft die glatte Schärfe.<br>
+          Wahrlich, brav getroffen!<br>
+          Seht, er ist entzwei!<br>
+          Und nun kann ich hoffen,<br>
+          und ich atme frei!
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Wehe! wehe!<br>
+          Beide Teile<br>
+          stehn in Eile<br>
+          schon als Knechte<br>
+          völlig fertig in die Höhe!<br>
+          Helft mir, ach! ihr hohen Mächte!
+        </div>
+        <div class="stanza" data-voice="lehrling">
+          Und sie laufen! Naß und nässer<br>
+          wird's im Saal und auf den Stufen.<br>
+          Welch entsetzliches Gewässer!<br>
+          Herr und Meister! hör mich rufen! —<br>
+          Ach, da kommt der Meister!<br>
+          Herr, die Not ist groß!<br>
+          Die ich rief, die Geister<br>
+          werd ich nun nicht los.
+        </div>
+        <div class="stanza" data-voice="meister">
+          <span class="speaker-label" data-voice="meister">Meister</span>
+          »In die Ecke,<br>
+          Besen! Besen!<br>
+          Seid's gewesen.<br>
+          Denn als Geister<br>
+          ruft euch nur, zu seinem Zwecke,<br>
+          erst hervor der alte Meister.«
+        </div>
+      </div>
+    </div>
+    <div class="poem-note-footer">Nach Lukians »Philopseudes« (2. Jh.). Walt Disneys »Fantasia« (1940) machte den Stoff weltberühmt.</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 16: NACHTLIED-ZITAT ══════════ -->
+<div class="slide bg-dark" data-index="17">
+  <div class="slide-content center-col">
+    <div class="quote-text stagger-1" style="max-width: 16ch;">Über allen Gipfeln ist Ruh.</div>
+    <div class="divider stagger-2" style="margin: 2vh 0;"></div>
+    <div class="quote-text stagger-3" style="font-size: clamp(1.5rem, 2.5vw, 2.5rem); max-width: 30ch; opacity: 0.6;">Warte nur, balde ruhest du auch.</div>
+    <div class="quote-source stagger-4">— Wandrers Nachtlied II, 1780</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 17: NATURWISSENSCHAFT ══════════ -->
+<div class="slide bg-warm" data-index="18">
+  <div class="slide-content two-col">
+    <div class="col" style="align-items:center; justify-content:center; display:flex;">
+      <div class="farben-wheel stagger-1"></div>
+    </div>
+    <div class="col">
+      <span class="label stagger-2">Der Naturforscher</span>
+      <h2 class="stagger-3">Farbenlehre und Morphologie</h2>
+      <p class="body-text stagger-4">»Zur Farbenlehre« (1810): Gegenentwurf zu Newton. Phänomenologischer Ansatz zur Farbwahrnehmung — beeinflusst Denker von Schopenhauer bis Wittgenstein.</p>
+      <p class="body-text stagger-5">Entdeckung des Zwischenkieferknochens (1784). »Metamorphose der Pflanzen« (1790). Über 17.000 gesammelte Mineralien.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 18: WISSEN-ZITAT ══════════ -->
+<div class="slide bg-green" data-index="19">
+  <div class="slide-content center-col">
+    <div class="quote-text stagger-1">Man sieht nur, was man weiß.</div>
+    <div class="quote-source stagger-2">— Gespräch mit Eckermann</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 19: ZEITSTRAHL I ══════════ -->
+<div class="slide bg-dark" data-index="20">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Lebensstationen</span>
+    <h2 class="stagger-2" style="margin-bottom: 2vh;">Zeitstrahl</h2>
+    <div style="width:100%;">
+      <div class="timeline-row stagger-3"><span class="timeline-year">1749</span><span class="timeline-event">Geburt in Frankfurt am Main</span></div>
+      <div class="timeline-row stagger-3"><span class="timeline-year">1765</span><span class="timeline-event">Jurastudium in Leipzig</span></div>
+      <div class="timeline-row stagger-3"><span class="timeline-year">1770</span><span class="timeline-event">Straßburg — Begegnung mit Herder</span></div>
+      <div class="timeline-row stagger-4"><span class="timeline-year">1773</span><span class="timeline-event">»Götz von Berlichingen« — Sturm und Drang</span></div>
+      <div class="timeline-row stagger-4"><span class="timeline-year">1774</span><span class="timeline-event">»Die Leiden des jungen Werthers« — Weltruhm</span></div>
+      <div class="timeline-row stagger-4"><span class="timeline-year">1775</span><span class="timeline-event">Ankunft in Weimar — Regierungsamt</span></div>
+      <div class="timeline-row stagger-5"><span class="timeline-year">1786</span><span class="timeline-event">Flucht nach Italien — künstlerische Wiedergeburt</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 20: ZEITSTRAHL II ══════════ -->
+<div class="slide bg-dark" data-index="21">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Lebensstationen</span>
+    <h2 class="stagger-2" style="margin-bottom: 2vh;">Zeitstrahl</h2>
+    <div style="width:100%;">
+      <div class="timeline-row stagger-3"><span class="timeline-year">1794</span><span class="timeline-event">Beginn der Freundschaft mit Schiller</span></div>
+      <div class="timeline-row stagger-3"><span class="timeline-year">1808</span><span class="timeline-event">»Faust I« erscheint — Begegnung mit Napoleon</span></div>
+      <div class="timeline-row stagger-4"><span class="timeline-year">1810</span><span class="timeline-event">»Zur Farbenlehre« — naturwissenschaftliches Hauptwerk</span></div>
+      <div class="timeline-row stagger-4"><span class="timeline-year">1819</span><span class="timeline-event">»West-östlicher Divan« — Orient trifft Okzident</span></div>
+      <div class="timeline-row stagger-5"><span class="timeline-year">1831</span><span class="timeline-event">Vollendung des »Faust II«</span></div>
+      <div class="timeline-row stagger-5"><span class="timeline-year">1832</span><span class="timeline-event">Tod in Weimar — »Mehr Licht!«</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 21: STREBEND-ZITAT ══════════ -->
+<div class="slide bg-burgundy" data-index="22">
+  <div class="slide-content center-col">
+    <div class="quote-text stagger-1">Wer immer strebend sich bemüht, den können wir erlösen.</div>
+    <div class="quote-source stagger-2">— Faust II, Vers 11936–11937</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 22: VERMÄCHTNIS ══════════ -->
+<div class="slide bg-green" data-index="23">
+  <div class="slide-content left-col">
+    <span class="label stagger-1">Vermächtnis</span>
+    <h2 class="stagger-2">Tod und Nachleben</h2>
+    <span class="date-text stagger-3">22. März 1832 — Weimar</span>
+    <p class="body-text stagger-4">Ein lyrisches Werk, das die deutsche Sprache auf ihren Gipfel führte. Dramen, die zu den größten der Weltliteratur zählen. Romane, die ganze Gattungen begründeten. Über 12.000 Briefe. Naturwissenschaftliche Studien, die bis heute inspirieren.</p>
+    <p class="body-text stagger-5" style="font-style:italic; color: var(--gold-light); font-size: clamp(1.2rem, 1.8vw, 1.8rem);">»Goethe repräsentiert den Augenblick der deutschen Geschichte, in dem die deutsche Bildung Weltkultur wird.« — Thomas Mann</p>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 23: MEHR LICHT ══════════ -->
+<div class="slide bg-dark" data-index="24">
+  <div class="slide-content center-col">
+    <div class="orn stagger-1">✦ ✦ ✦</div>
+    <div class="quote-text stagger-2" style="font-size: clamp(4rem, 8vw, 9rem); max-width: none;">Mehr Licht!</div>
+    <div class="divider stagger-3" style="margin: 3vh 0;"></div>
+    <div class="quote-source stagger-4" style="font-size: clamp(1.2rem, 1.8vw, 1.8rem);">Letzte Worte · 22. März 1832</div>
+    <div class="orn stagger-5" style="margin-top: 3vh;">✦</div>
+  </div>
+</div>
+
+<!-- ══════════ SLIDE 24: SCHLUSS ══════════ -->
+<div class="slide bg-dark" data-index="25">
+  <div class="slide-content center-col">
+    <h1 class="stagger-1" style="font-size: clamp(3rem, 6vw, 6rem);">Johann Wolfgang<br><span style="font-weight:400; font-style:italic; font-size:0.55em; color: var(--gold-light);">von</span> Goethe</h1>
+    <div class="divider stagger-2" style="margin: 2vh 0;"></div>
+    <span class="date-text stagger-3">1749 — 1832</span>
+    <p class="stagger-4" style="font-size: clamp(1.2rem, 1.8vw, 1.8rem); color: var(--gold-dim); font-style: italic; margin-top: 3vh;">»Was man nicht versteht, besitzt man nicht.«</p>
+  </div>
+</div>
+
+</div><!-- /slideshow -->
+
+<script>
+(function() {
+  'use strict';
+
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let transitioning = false;
+
+  const progressBar = document.getElementById('progressBar');
+  const slideCounter = document.getElementById('slideCounter');
+  const navHint = document.getElementById('navHint');
+  const cursor = document.getElementById('cursor');
+
+  function updateUI() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    slideCounter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function goTo(index) {
+    if (transitioning || index === current || index < 0 || index >= total) return;
+    transitioning = true;
+
+    // Stop TTS when leaving a poem slide
+    stopAllTTS();
+
+    slides[current].classList.remove('active');
+    slides[current].querySelectorAll('[class*="stagger-"]').forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight;
+      el.style.animation = '';
+    });
+    const oldContent = slides[current].querySelector('.slide-content');
+    if (oldContent) {
+      oldContent.style.animation = 'none';
+      oldContent.offsetHeight;
+      oldContent.style.animation = '';
+    }
+    // Reset scroll on poem slides
+    const oldScroll = slides[current].querySelector('.poem-scroll-area');
+    if (oldScroll) oldScroll.scrollTop = 0;
+
+    current = index;
+    slides[current].classList.add('active');
+    updateUI();
+
+    setTimeout(() => { transitioning = false; }, 500);
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  // Check if current slide is a poem slide with scrollable content
+  function isOnPoemSlide() {
+    return slides[current].classList.contains('poem-slide');
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      e.preventDefault();
+      next();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      prev();
+    } else if (e.key === ' ') {
+      e.preventDefault();
+      // On poem slide: space toggles TTS; otherwise next slide
+      if (isOnPoemSlide()) {
+        const poemId = slides[current].querySelector('.poem-verses-body').id.replace('-verses', '');
+        togglePoem(poemId);
+      } else {
+        next();
+      }
+    } else if (e.key === 'ArrowDown' && isOnPoemSlide()) {
+      // Scroll poem down
+      const area = slides[current].querySelector('.poem-scroll-area');
+      if (area) area.scrollBy({ top: 150, behavior: 'smooth' });
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp' && isOnPoemSlide()) {
+      const area = slides[current].querySelector('.poem-scroll-area');
+      if (area) area.scrollBy({ top: -150, behavior: 'smooth' });
+      e.preventDefault();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(total - 1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    } else if (e.key === 'Escape') {
+      stopAllTTS();
+    }
+    navHint.style.opacity = '0';
+  });
+
+  // Click navigation — but not on poem scroll area or buttons
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.play-btn') || e.target.closest('.poem-scroll-area')) return;
+    if (e.clientX < window.innerWidth / 3) {
+      prev();
+    } else {
+      next();
+    }
+    navHint.style.opacity = '0';
+  });
+
+  // Touch / swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (e.target.closest('.play-btn') || e.target.closest('.poem-scroll-area')) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) next(); else prev();
+    }
+    navHint.style.opacity = '0';
+  }, { passive: true });
+
+  // Mouse wheel — on poem slides, scroll the poem; otherwise navigate
+  let wheelTimeout = null;
+  document.addEventListener('wheel', (e) => {
+    if (isOnPoemSlide()) {
+      // Let the poem scroll area handle it naturally
+      const area = slides[current].querySelector('.poem-scroll-area');
+      if (area) {
+        const atTop = area.scrollTop <= 0 && e.deltaY < 0;
+        const atBottom = area.scrollTop + area.clientHeight >= area.scrollHeight - 5 && e.deltaY > 0;
+        if (atTop || atBottom) {
+          e.preventDefault();
+          if (wheelTimeout) return;
+          if (atBottom) next(); else if (atTop) prev();
+          wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 600);
+        }
+        // Otherwise let natural scroll happen
+        return;
+      }
+    }
+    e.preventDefault();
+    if (wheelTimeout) return;
+    if (e.deltaY > 30) next();
+    else if (e.deltaY < -30) prev();
+    wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 400);
+  }, { passive: false });
+
+  // Custom cursor
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  setTimeout(() => { navHint.style.opacity = '0'; }, 6000);
+  updateUI();
+
+
+  // ═══════════════════════════════════════
+  // TEXT-TO-SPEECH ENGINE — Distinct Voices
+  // ═══════════════════════════════════════
+
+  let currentTTS = null;
+  let isSpeaking = false;
+  let allVoices = [];
+  let voiceMap = {};   // role -> { voice, pitch, rate }
+  let voicesReady = false;
+
+  // ── Voice Discovery ──
+  function loadVoices() {
+    allVoices = speechSynthesis.getVoices();
+    if (allVoices.length) assignVoices();
+  }
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+
+  function findVoice(namePatterns, langPrefix) {
+    // Try to find a voice matching name patterns (case-insensitive)
+    for (const pattern of namePatterns) {
+      const re = new RegExp(pattern, 'i');
+      const match = allVoices.find(v => re.test(v.name) && v.lang.startsWith(langPrefix || 'de'));
+      if (match) return match;
+    }
+    return null;
+  }
+
+  function assignVoices() {
+    if (voicesReady) return;
+    const de = allVoices.filter(v => v.lang.startsWith('de'));
+    if (!de.length) return;
+
+    // Categorize available German voices
+    // macOS premium voices: Anna (f), Markus (m), Petra (f), Yannick (m), Martin (m), Helena (f)
+    // Also: Viktor, Grandma, etc. may exist
+    const maleNames = ['markus', 'martin', 'yannick', 'viktor', 'hans', 'thomas', 'stefan', 'male'];
+    const femaleNames = ['anna', 'petra', 'helena', 'marie', 'sophie', 'marlene', 'female', 'grandma'];
+    const enhancedNames = ['premium', 'enhanced', 'eloquence', 'compact'];
+
+    // Find distinct voices
+    const maleVoice = findVoice(maleNames, 'de');
+    const femaleVoice = findVoice(femaleNames, 'de');
+
+    // If we can't find gendered voices, just use what's available
+    const voice1 = de[0];
+    const voice2 = de.length > 1 ? de[1] : voice1;
+    const voice3 = de.length > 2 ? de[2] : voice1;
+
+    // Assign distinct voice+pitch combos per character
+    // Erzähler: neutral, clear (prefer female for narrator warmth)
+    voiceMap.erzaehler = {
+      voice: femaleVoice || voice1,
+      pitch: 1.0,
+      rate: 0.85,
+      volume: 1.0,
+    };
+    // Vater: deep male, calm, reassuring
+    voiceMap.vater = {
+      voice: maleVoice || voice2,
+      pitch: 0.7,
+      rate: 0.82,
+      volume: 1.0,
+    };
+    // Sohn: high, urgent, frightened — use female voice pitched up for child effect
+    voiceMap.sohn = {
+      voice: femaleVoice || voice1,
+      pitch: 1.6,
+      rate: 1.0,
+      volume: 0.95,
+    };
+    // Erlkönig: seductive, eerie, whispering — different voice, slow, low
+    voiceMap.erlkoenig = {
+      voice: maleVoice || voice2,
+      pitch: 0.45,
+      rate: 0.7,
+      volume: 0.85,
+    };
+    // Lehrling: young, energetic, increasingly panicked
+    voiceMap.lehrling = {
+      voice: maleVoice || voice2,
+      pitch: 1.15,
+      rate: 0.9,
+      volume: 1.0,
+    };
+    // Meister: deep, authoritative, commanding
+    voiceMap.meister = {
+      voice: maleVoice || voice2,
+      pitch: 0.5,
+      rate: 0.72,
+      volume: 1.0,
+    };
+
+    voicesReady = true;
+    console.log('TTS Stimmen zugewiesen:', Object.keys(voiceMap).map(k =>
+      k + ' → ' + (voiceMap[k].voice?.name || '?') + ' (pitch ' + voiceMap[k].pitch + ')'
+    ).join(', '));
+  }
+
+  // ── Text Extraction ──
+  function getStanzaText(stanzaEl) {
+    const clone = stanzaEl.cloneNode(true);
+    clone.querySelectorAll('.speaker-label').forEach(l => l.remove());
+    let html = clone.innerHTML;
+    html = html.replace(/<br\s*\/?>/gi, ', ');
+    html = html.replace(/—/g, ' — ');
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent.trim();
+  }
+
+  // ── Stanza Highlight & Auto-Scroll ──
+  function highlightStanza(poemId, index) {
+    const verses = document.getElementById(poemId + '-verses');
+    if (!verses) return;
+    const stanzas = verses.querySelectorAll('.stanza');
+    stanzas.forEach((s, i) => s.classList.toggle('speaking', i === index));
+    if (index >= 0 && index < stanzas.length) {
+      const scrollArea = document.getElementById(poemId + '-scroll');
+      if (scrollArea) {
+        const stanza = stanzas[index];
+        const offsetTop = stanza.offsetTop - scrollArea.offsetTop - 40;
+        scrollArea.scrollTo({ top: offsetTop, behavior: 'smooth' });
+      }
+    }
+  }
+
+  function clearHighlights(poemId) {
+    const verses = document.getElementById(poemId + '-verses');
+    if (!verses) return;
+    verses.querySelectorAll('.stanza').forEach(s => s.classList.remove('speaking'));
+  }
+
+  // ── Button State ──
+  function updateButton(poemId, playing) {
+    const btn = document.getElementById('play' + poemId.charAt(0).toUpperCase() + poemId.slice(1));
+    if (!btn) return;
+    btn.classList.toggle('playing', playing);
+    btn.querySelector('.play-icon').innerHTML = playing ? '&#9632;' : '&#9654;';
+    const textNode = btn.childNodes[btn.childNodes.length - 1];
+    if (textNode) textNode.textContent = playing ? ' Stopp' : ' Vorlesen';
+  }
+
+  // ── Speak a single stanza with character voice ──
+  function speakStanza(poemId, stanzaIndex) {
+    const verses = document.getElementById(poemId + '-verses');
+    if (!verses) return;
+    const stanzas = verses.querySelectorAll('.stanza');
+    if (stanzaIndex >= stanzas.length) {
+      stopAllTTS();
+      return;
+    }
+
+    // Make sure voices are loaded
+    if (!voicesReady) {
+      loadVoices();
+      if (!voicesReady) {
+        // Fallback: just try with defaults
+        allVoices = speechSynthesis.getVoices();
+        assignVoices();
+      }
+    }
+
+    const stanza = stanzas[stanzaIndex];
+    const role = stanza.getAttribute('data-voice') || 'erzaehler';
+    const text = getStanzaText(stanza);
+    const profile = voiceMap[role] || voiceMap.erzaehler || { pitch: 1, rate: 0.85, volume: 1 };
+
+    highlightStanza(poemId, stanzaIndex);
+
+    // For Zauberlehrling: increase panic as poem progresses
+    let rateMod = 0;
+    let pitchMod = 0;
+    if (poemId === 'zauberlehrling' && role === 'lehrling') {
+      const progress = stanzaIndex / stanzas.length;
+      rateMod = progress * 0.2;     // speeds up toward the end
+      pitchMod = progress * 0.15;   // pitch rises with panic
+    }
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'de-DE';
+    if (profile.voice) utter.voice = profile.voice;
+    utter.pitch = Math.min(2, Math.max(0.1, profile.pitch + pitchMod));
+    utter.rate = Math.min(2, Math.max(0.3, profile.rate + rateMod));
+    utter.volume = profile.volume || 1;
+
+    // Small pause between stanzas for drama
+    utter.onend = () => {
+      if (!isSpeaking) return;
+      const pauseMs = role === 'erlkoenig' ? 700 : role === 'erzaehler' ? 500 : 350;
+      setTimeout(() => {
+        if (isSpeaking) speakStanza(poemId, stanzaIndex + 1);
+      }, pauseMs);
+    };
+    utter.onerror = () => {
+      if (isSpeaking) speakStanza(poemId, stanzaIndex + 1);
+    };
+
+    currentTTS = { poemId, stanzaIndex, utterance: utter };
+    speechSynthesis.speak(utter);
+  }
+
+  // ── Stop ──
+  function stopAllTTS() {
+    isSpeaking = false;
+    speechSynthesis.cancel();
+    if (currentTTS) {
+      clearHighlights(currentTTS.poemId);
+      updateButton(currentTTS.poemId, false);
+      currentTTS = null;
+    }
+    ['erlkoenig', 'zauberlehrling'].forEach(id => {
+      updateButton(id, false);
+      clearHighlights(id);
+    });
+  }
+
+  // ── Global toggle ──
+  window.togglePoem = function(poemId) {
+    if (isSpeaking && currentTTS && currentTTS.poemId === poemId) {
+      stopAllTTS();
+      return;
+    }
+    stopAllTTS();
+    isSpeaking = true;
+    updateButton(poemId, true);
+    speakStanza(poemId, 0);
+  };
+
+  // Stop TTS on page unload
+  window.addEventListener('beforeunload', () => speechSynthesis.cancel());
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Johann Wolfgang von Goethe — Leben und Werk</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS RESET & VARIABLES
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #F5F0E8;
+  --cream-dark: #E8E0D0;
+  --gold: #C5A55A;
+  --gold-light: #D4BC7C;
+  --gold-dark: #A08030;
+  --green-deep: #2A3C2A;
+  --green-dark: #1A2A1A;
+  --green-forest: #3D5C3D;
+  --burgundy: #6B2D3E;
+  --burgundy-light: #8B3D4E;
+  --burgundy-dark: #4A1A2A;
+  --charcoal: #1C1C1C;
+  --charcoal-warm: #2A2420;
+  --brown-warm: #5C4A3A;
+  --brown-light: #8A7A6A;
+  --text-dark: #1A1814;
+  --text-body: #3A3530;
+  --text-muted: #6A6258;
+  --ink: #0D0A07;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  color: var(--text-body);
+  background: var(--cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════
+   GLOBAL TYPOGRAPHY
+   ═══════════════════════════════════════════ */
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--text-dark);
+  line-height: 1.15;
+}
+
+p {
+  font-size: 1.2rem;
+  line-height: 1.85;
+  font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════
+   NOISE TEXTURE OVERLAY
+   ═══════════════════════════════════════════ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* ═══════════════════════════════════════════
+   LOADING SCREEN
+   ═══════════════════════════════════════════ */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--charcoal-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+#loader .quill-loader {
+  width: 60px;
+  height: 60px;
+  position: relative;
+}
+#loader .quill-loader::before {
+  content: '✦';
+  font-size: 2.5rem;
+  color: var(--gold);
+  animation: quillSpin 2s ease-in-out infinite;
+  display: block;
+  text-align: center;
+}
+@keyframes quillSpin {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 1; }
+  50% { transform: rotate(180deg) scale(0.8); opacity: 0.5; }
+}
+#loader p {
+  color: var(--gold-light);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.5s ease;
+  background: transparent;
+}
+nav.scrolled {
+  background: rgba(26, 36, 26, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.7rem 2.5rem;
+  box-shadow: 0 2px 30px rgba(0,0,0,0.3);
+}
+nav .nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+nav .nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+nav .nav-links a {
+  color: var(--cream-dark);
+  text-decoration: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+}
+nav .nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+nav .nav-links a:hover { color: var(--gold); }
+nav .nav-links a:hover::after { width: 100%; }
+
+/* ═══════════════════════════════════════════
+   HERO SECTION
+   ═══════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--charcoal-warm) 0%, var(--green-dark) 40%, var(--charcoal) 100%);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 50%, rgba(197, 165, 90, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 80% at 75% 30%, rgba(107, 45, 62, 0.1) 0%, transparent 60%);
+}
+
+/* CSS Portrait Silhouette */
+.hero-portrait {
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 420px;
+  height: 560px;
+  opacity: 0.12;
+}
+.hero-portrait .portrait-frame {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--gold);
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  position: relative;
+  overflow: hidden;
+}
+.hero-portrait .portrait-frame::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(197, 165, 90, 0.4);
+  border-radius: inherit;
+}
+.hero-portrait svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 4rem;
+}
+.hero-content .hero-epoch {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease 0.5s forwards;
+}
+.hero-content h1 {
+  font-size: clamp(3rem, 7vw, 6rem);
+  color: var(--cream);
+  font-weight: 800;
+  line-height: 1.05;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1.2s ease 0.7s forwards;
+}
+.hero-content h1 .von {
+  font-weight: 400;
+  font-style: italic;
+  font-size: 0.65em;
+  color: var(--gold-light);
+  display: block;
+  margin: 0.2em 0;
+}
+.hero-content .hero-dates {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin-top: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease 1s forwards;
+}
+.hero-content .hero-subtitle {
+  font-size: 1.3rem;
+  color: var(--cream-dark);
+  margin-top: 1.5rem;
+  font-style: italic;
+  font-weight: 300;
+  max-width: 550px;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease 1.3s forwards;
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 2s forwards;
+}
+.hero-scroll-indicator span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.hero-scroll-indicator .scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50% { transform: scaleY(0.5); opacity: 0.4; }
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   DECORATIVE DIVIDERS
+   ═══════════════════════════════════════════ */
+.ornament {
+  text-align: center;
+  padding: 2rem 0;
+  font-size: 1.5rem;
+  color: var(--gold);
+  letter-spacing: 0.5em;
+  opacity: 0.6;
+}
+.ornament-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 3rem 0;
+}
+.ornament-line::before,
+.ornament-line::after {
+  content: '';
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+.ornament-line span {
+  color: var(--gold);
+  font-size: 1.2rem;
+}
+
+/* ═══════════════════════════════════════════
+   QUOTE SECTIONS
+   ═══════════════════════════════════════════ */
+.quote-section {
+  padding: 6rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.quote-section.dark {
+  background: linear-gradient(170deg, var(--green-dark), var(--charcoal-warm));
+}
+.quote-section.burgundy {
+  background: linear-gradient(170deg, var(--burgundy-dark), var(--charcoal-warm) 80%);
+}
+.quote-section.forest {
+  background: linear-gradient(170deg, var(--green-deep), #0D1A0D);
+}
+.quote-section blockquote {
+  max-width: 750px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.quote-section blockquote::before {
+  content: '„';
+  font-family: 'Playfair Display', serif;
+  font-size: 8rem;
+  color: var(--gold);
+  opacity: 0.2;
+  position: absolute;
+  top: -3rem;
+  left: -2rem;
+  line-height: 1;
+}
+.quote-section blockquote p {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.5;
+}
+.quote-section blockquote cite {
+  display: block;
+  margin-top: 1.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-style: normal;
+  color: var(--gold-light);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.quote-section .quote-ornament {
+  position: absolute;
+  font-size: 15rem;
+  color: var(--gold);
+  opacity: 0.03;
+  font-family: 'Playfair Display', serif;
+  user-select: none;
+}
+
+/* ═══════════════════════════════════════════
+   BIOGRAPHY SECTIONS
+   ═══════════════════════════════════════════ */
+.bio-section {
+  padding: 7rem 2rem;
+  position: relative;
+}
+.bio-section .section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.bio-section .section-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 0.8rem;
+  display: block;
+}
+.bio-section .section-title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+.bio-section .section-date {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+  display: block;
+}
+.bio-section .bio-text {
+  columns: 2;
+  column-gap: 3rem;
+  column-rule: 1px solid rgba(197, 165, 90, 0.15);
+}
+.bio-section .bio-text p {
+  margin-bottom: 1.5rem;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.bio-section .bio-text p:first-of-type::first-letter {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  float: left;
+  line-height: 0.85;
+  margin-right: 0.1em;
+  color: var(--gold-dark);
+  font-weight: 700;
+}
+
+/* Alternating backgrounds */
+.bio-section:nth-child(even) {
+  background: linear-gradient(180deg, rgba(42, 60, 42, 0.04), transparent);
+}
+
+/* Side decorative elements */
+.bio-section .side-decoration {
+  position: absolute;
+  top: 7rem;
+  width: 200px;
+  height: 300px;
+  opacity: 0.04;
+  pointer-events: none;
+}
+.bio-section .side-decoration.left {
+  left: 2rem;
+  border-left: 2px solid var(--gold);
+  border-top: 2px solid var(--gold);
+}
+.bio-section .side-decoration.right {
+  right: 2rem;
+  border-right: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+}
+
+/* ═══════════════════════════════════════════
+   3D BOOK SECTION
+   ═══════════════════════════════════════════ */
+.book-section {
+  padding: 8rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 50%, var(--cream) 100%);
+  perspective: 1200px;
+  min-height: 80vh;
+}
+.book-section h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  text-align: center;
+  margin-bottom: 4rem;
+  color: var(--text-dark);
+}
+.book-3d {
+  width: 320px;
+  height: 440px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-25deg) rotateX(5deg);
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: pointer;
+}
+.book-3d:hover {
+  transform: rotateY(-5deg) rotateX(2deg);
+}
+.book-3d .book-cover {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 60%, #2A0A15 100%);
+  border-radius: 2px 12px 12px 2px;
+  box-shadow:
+    inset 0 0 30px rgba(0,0,0,0.3),
+    inset -3px 0 8px rgba(0,0,0,0.2);
+  transform: translateZ(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 1px solid rgba(197, 165, 90, 0.3);
+}
+.book-3d .book-cover .cover-border {
+  position: absolute;
+  inset: 12px;
+  border: 1px solid var(--gold);
+  opacity: 0.4;
+  border-radius: 0 8px 8px 0;
+}
+.book-3d .book-cover .cover-border-inner {
+  position: absolute;
+  inset: 20px;
+  border: 1px solid var(--gold);
+  opacity: 0.2;
+  border-radius: 0 6px 6px 0;
+}
+.book-3d .book-cover .cover-ornament-top,
+.book-3d .book-cover .cover-ornament-bottom {
+  font-size: 1.5rem;
+  color: var(--gold);
+  opacity: 0.5;
+  letter-spacing: 0.3em;
+}
+.book-3d .book-cover h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--gold);
+  text-align: center;
+  line-height: 1.3;
+  margin: 1.5rem 0 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.book-3d .book-cover .cover-author {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: var(--gold-light);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+.book-3d .book-spine {
+  position: absolute;
+  left: -39px;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  background: linear-gradient(90deg, var(--burgundy-dark), var(--burgundy) 30%, var(--burgundy-dark));
+  transform: rotateY(-90deg);
+  transform-origin: right center;
+  border-radius: 2px 0 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+}
+.book-3d .book-spine span {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+.book-3d .book-pages {
+  position: absolute;
+  right: 2px;
+  top: 4px;
+  width: 36px;
+  height: calc(100% - 8px);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--cream) 0px,
+    var(--cream) 2px,
+    var(--cream-dark) 2px,
+    var(--cream-dark) 3px
+  );
+  transform: translateZ(-1px) rotateY(0deg);
+  transform-origin: left center;
+  border-radius: 0 2px 2px 0;
+}
+.book-3d .book-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #2A0A15, var(--burgundy-dark));
+  border-radius: 2px 12px 12px 2px;
+  transform: translateZ(-20px);
+}
+
+/* ═══════════════════════════════════════════
+   TIMELINE SECTION
+   ═══════════════════════════════════════════ */
+.timeline-section {
+  padding: 8rem 2rem;
+  background: linear-gradient(180deg, var(--green-dark), var(--charcoal-warm));
+  position: relative;
+  overflow: hidden;
+}
+.timeline-section h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+.timeline-section .section-subtitle {
+  text-align: center;
+  color: var(--gold-light);
+  font-size: 1.1rem;
+  font-style: italic;
+  margin-bottom: 5rem;
+}
+.timeline {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--gold), var(--gold), transparent);
+  transform: translateX(-50%);
+}
+.timeline-item {
+  display: flex;
+  margin-bottom: 4rem;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.timeline-item:nth-child(odd) {
+  flex-direction: row;
+  padding-right: calc(50% + 2.5rem);
+  text-align: right;
+}
+.timeline-item:nth-child(even) {
+  flex-direction: row-reverse;
+  padding-left: calc(50% + 2.5rem);
+  text-align: left;
+}
+.timeline-item .timeline-dot {
+  position: absolute;
+  left: 50%;
+  top: 0.5rem;
+  width: 14px;
+  height: 14px;
+  background: var(--gold);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 0 4px var(--green-dark), 0 0 20px rgba(197, 165, 90, 0.3);
+  z-index: 2;
+}
+.timeline-item .timeline-year {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.timeline-item .timeline-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--cream);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.timeline-item .timeline-desc {
+  font-size: 1rem;
+  color: var(--cream-dark);
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+/* ═══════════════════════════════════════════
+   WORKS / WERKE SECTION
+   ═══════════════════════════════════════════ */
+.werke-section {
+  padding: 8rem 2rem;
+  background: var(--cream);
+  position: relative;
+}
+.werke-section h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+.werke-section .section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 5rem;
+}
+.werke-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2.5rem;
+}
+.werk-card {
+  background: white;
+  border: 1px solid rgba(197, 165, 90, 0.15);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+  transform: translateY(40px);
+  cursor: default;
+}
+.werk-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.werk-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--burgundy), var(--gold));
+  transform: scaleX(0);
+  transition: transform 0.5s ease;
+  transform-origin: left;
+}
+.werk-card:hover::before {
+  transform: scaleX(1);
+}
+.werk-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+  border-color: var(--gold);
+}
+.werk-card .werk-genre {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  margin-bottom: 0.8rem;
+  display: block;
+  font-weight: 600;
+}
+.werk-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.werk-card .werk-year {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: 1.2rem;
+  display: block;
+}
+.werk-card .werk-desc {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-body);
+}
+.werk-card .werk-icon {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  font-size: 3rem;
+  opacity: 0.06;
+  transition: opacity 0.3s;
+}
+.werk-card:hover .werk-icon {
+  opacity: 0.12;
+}
+
+/* ═══════════════════════════════════════════
+   GEDICHTE (POEMS) SECTION
+   ═══════════════════════════════════════════ */
+.gedichte-section {
+  padding: 8rem 2rem;
+  background: linear-gradient(170deg, var(--charcoal-warm) 0%, var(--green-dark) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.gedichte-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(197, 165, 90, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 80% 20%, rgba(107, 45, 62, 0.08) 0%, transparent 60%);
+}
+.gedichte-section h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  color: var(--cream);
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 2;
+}
+.gedichte-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  position: relative;
+  z-index: 2;
+}
+.gedicht-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(197, 165, 90, 0.12);
+  padding: 2.5rem;
+  border-radius: 2px;
+  backdrop-filter: blur(8px);
+  transition: all 0.5s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+.gedicht-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.gedicht-card:hover {
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px);
+}
+.gedicht-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+.gedicht-card .gedicht-year {
+  font-size: 0.9rem;
+  color: var(--gold-light);
+  font-style: italic;
+  margin-bottom: 1.2rem;
+  display: block;
+  opacity: 0.7;
+}
+.gedicht-card .gedicht-excerpt {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.1rem;
+  color: var(--cream-dark);
+  line-height: 1.8;
+  font-style: italic;
+  border-left: 2px solid rgba(197, 165, 90, 0.3);
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+.gedicht-card .gedicht-info {
+  font-size: 0.95rem;
+  color: var(--brown-light);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   FULL POEM SECTIONS
+   ═══════════════════════════════════════════ */
+.poem-full-section {
+  padding: 6rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.poem-full-section .poem-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.poem-full-section .poem-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.poem-full-section .poem-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 0.3rem;
+}
+.poem-full-section .poem-header .poem-year {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  font-style: italic;
+}
+.poem-full-section .poem-intro {
+  text-align: center;
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  font-style: italic;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.7;
+}
+.poem-full-section.dark-poem .poem-intro {
+  color: var(--brown-light);
+}
+.poem-full-section .poem-verses {
+  font-family: 'EB Garamond', serif;
+  font-size: 1.25rem;
+  line-height: 2;
+  color: var(--text-body);
+}
+.poem-full-section.dark-poem .poem-verses {
+  color: var(--cream-dark);
+}
+.poem-full-section .poem-verses .stanza {
+  margin-bottom: 2rem;
+  padding-left: 2rem;
+  border-left: 2px solid rgba(197, 165, 90, 0.15);
+}
+.poem-full-section.dark-poem .poem-verses .stanza {
+  border-left-color: rgba(197, 165, 90, 0.2);
+}
+.poem-full-section .poem-verses .stanza .speaker {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 0.3rem;
+}
+.poem-full-section.dark-poem .poem-verses .stanza .speaker {
+  color: var(--gold);
+}
+.poem-full-section .poem-note {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.poem-full-section.dark-poem .poem-note {
+  color: var(--brown-light);
+}
+.poem-full-section.dark-poem {
+  background: linear-gradient(170deg, var(--green-dark) 0%, var(--charcoal-warm) 100%);
+}
+.poem-full-section.dark-poem .poem-header h2 {
+  color: var(--cream);
+}
+
+/* ═══════════════════════════════════════════
+   NATURWISSENSCHAFT SECTION
+   ═══════════════════════════════════════════ */
+.science-section {
+  padding: 8rem 2rem;
+  background: var(--cream);
+  position: relative;
+}
+.science-section .section-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.science-section h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+.science-section .section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 4rem;
+}
+
+/* Color wheel for Farbenlehre */
+.farbenlehre-visual {
+  width: 280px;
+  height: 280px;
+  margin: 0 auto 3rem;
+  position: relative;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #E63946, #F4A261, #E9C46A,
+    #2A9D8F, #264653, #6A4C93,
+    #E63946
+  );
+  box-shadow: 0 0 0 12px var(--cream), 0 0 0 13px rgba(197, 165, 90, 0.3),
+    0 20px 60px rgba(0,0,0,0.1);
+  animation: slowRotate 30s linear infinite;
+}
+.farbenlehre-visual::before {
+  content: '';
+  position: absolute;
+  inset: 35%;
+  border-radius: 50%;
+  background: var(--cream);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+}
+.farbenlehre-visual::after {
+  content: 'Farben\Alehre';
+  white-space: pre-line;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--text-dark);
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+@keyframes slowRotate {
+  to { transform: rotate(360deg); }
+}
+
+.science-text {
+  columns: 2;
+  column-gap: 3rem;
+  column-rule: 1px solid rgba(197, 165, 90, 0.15);
+}
+.science-text p {
+  margin-bottom: 1.5rem;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* ═══════════════════════════════════════════
+   VERMÄCHTNIS / LEGACY SECTION
+   ═══════════════════════════════════════════ */
+.legacy-section {
+  padding: 8rem 2rem;
+  background: linear-gradient(180deg, var(--charcoal-warm) 0%, var(--green-dark) 50%, var(--charcoal) 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.legacy-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(197, 165, 90, 0.06) 0%, transparent 70%);
+}
+.legacy-section .section-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.legacy-section h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+.legacy-section .legacy-dates {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: 3rem;
+}
+.legacy-section p {
+  color: var(--cream-dark);
+  font-size: 1.2rem;
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+/* ═══════════════════════════════════════════
+   QUILL WRITING ANIMATION
+   ═══════════════════════════════════════════ */
+.quill-section {
+  padding: 5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: var(--cream);
+}
+.quill-canvas {
+  position: relative;
+  width: 500px;
+  max-width: 90vw;
+  height: 120px;
+}
+.quill-text {
+  font-family: 'EB Garamond', serif;
+  font-size: 2rem;
+  font-style: italic;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid var(--ink);
+  animation: typeWriter 4s steps(40) 1s forwards, blinkCursor 0.6s step-end infinite;
+  width: 0;
+}
+@keyframes typeWriter {
+  to { width: 100%; }
+}
+@keyframes blinkCursor {
+  50% { border-color: transparent; }
+}
+.quill-icon {
+  position: absolute;
+  top: -2rem;
+  font-size: 2.5rem;
+  transform: rotate(-30deg);
+  animation: quillMove 4s ease 1s forwards;
+  left: 0;
+  opacity: 0.6;
+}
+@keyframes quillMove {
+  to { left: calc(100% - 2rem); }
+}
+
+/* ═══════════════════════════════════════════
+   3D FLOATING ELEMENTS
+   ═══════════════════════════════════════════ */
+.floating-elements {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+.floating-el {
+  position: absolute;
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  opacity: 0;
+  font-style: italic;
+  animation: floatUp 20s linear infinite;
+  will-change: transform;
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
+  10% { opacity: 0.04; }
+  90% { opacity: 0.04; }
+  100% { transform: translateY(-100vh) rotate(15deg) scale(1.1); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+footer {
+  padding: 4rem 2rem;
+  background: var(--charcoal);
+  text-align: center;
+  border-top: 1px solid rgba(197, 165, 90, 0.15);
+}
+footer .footer-ornament {
+  color: var(--gold);
+  font-size: 1.5rem;
+  letter-spacing: 0.5em;
+  margin-bottom: 1.5rem;
+  opacity: 0.4;
+}
+footer p {
+  color: var(--brown-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+footer .footer-quote {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: var(--gold-light);
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL ANIMATIONS
+   ═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ═══════════════════════════════════════════
+   PARALLAX PORTRAIT SECTIONS
+   ═══════════════════════════════════════════ */
+.portrait-section {
+  height: 70vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.portrait-section .portrait-bg {
+  position: absolute;
+  inset: -20%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+.portrait-section .portrait-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(26, 42, 26, 0.7), rgba(28, 28, 28, 0.85));
+}
+.portrait-section .portrait-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 700px;
+  padding: 2rem;
+}
+.portrait-section .portrait-content h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: var(--cream);
+  margin-bottom: 1rem;
+}
+.portrait-section .portrait-content p {
+  font-size: 1.3rem;
+  color: var(--cream-dark);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* CSS-Generated Portrait Art */
+.css-portrait {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+.css-portrait .layer {
+  position: absolute;
+  border-radius: 50%;
+}
+.css-portrait .layer-1 {
+  inset: 10%;
+  background: radial-gradient(ellipse at 40% 35%, rgba(197, 165, 90, 0.15), transparent 60%);
+}
+.css-portrait .layer-2 {
+  inset: 20%;
+  background: radial-gradient(ellipse at 55% 45%, rgba(107, 45, 62, 0.12), transparent 50%);
+}
+.css-portrait .layer-3 {
+  inset: 15%;
+  background: radial-gradient(ellipse at 45% 40%, rgba(42, 60, 42, 0.1), transparent 55%);
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .bio-section .bio-text,
+  .science-text {
+    columns: 1;
+  }
+  .gedichte-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-portrait {
+    display: none;
+  }
+  .hero-content {
+    padding: 0 2rem;
+  }
+  nav .nav-links {
+    display: none;
+  }
+  .timeline-item:nth-child(odd),
+  .timeline-item:nth-child(even) {
+    padding-left: 3rem;
+    padding-right: 0;
+    text-align: left;
+    flex-direction: row;
+  }
+  .timeline::before {
+    left: 0;
+  }
+  .timeline-item .timeline-dot {
+    left: 0;
+  }
+  .werke-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loader">
+  <div class="quill-loader"></div>
+  <p>»Wer nicht neugierig ist, erfährt nichts.«</p>
+</div>
+
+<!-- Floating Background Elements -->
+<div class="floating-elements" id="floatingEls"></div>
+
+<!-- Navigation -->
+<nav id="mainNav">
+  <div class="nav-brand">Goethe</div>
+  <ul class="nav-links">
+    <li><a href="#leben">Leben</a></li>
+    <li><a href="#zeitstrahl">Zeitstrahl</a></li>
+    <li><a href="#werke">Werke</a></li>
+    <li><a href="#gedichte">Gedichte</a></li>
+    <li><a href="#wissenschaft">Wissenschaft</a></li>
+    <li><a href="#vermaechtnis">Vermächtnis</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-portrait">
+    <div class="portrait-frame">
+      <svg viewBox="0 0 420 560" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="pg1" cx="50%" cy="35%" r="45%">
+            <stop offset="0%" stop-color="#C5A55A" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#C5A55A" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="pg2" cx="50%" cy="60%" r="35%">
+            <stop offset="0%" stop-color="#C5A55A" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#C5A55A" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- Abstract portrait silhouette -->
+        <ellipse cx="210" cy="180" rx="85" ry="105" fill="url(#pg1)"/>
+        <ellipse cx="210" cy="380" rx="130" ry="160" fill="url(#pg2)"/>
+        <path d="M140 200 Q160 120 210 100 Q260 120 280 200" fill="none" stroke="#C5A55A" stroke-opacity="0.3" stroke-width="1.5"/>
+        <path d="M170 230 Q190 250 210 248 Q230 250 250 230" fill="none" stroke="#C5A55A" stroke-opacity="0.2" stroke-width="1"/>
+        <circle cx="190" cy="180" r="4" fill="#C5A55A" fill-opacity="0.2"/>
+        <circle cx="230" cy="180" r="4" fill="#C5A55A" fill-opacity="0.2"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-epoch">Dichter · Denker · Naturforscher</div>
+    <h1>
+      Johann Wolfgang
+      <span class="von">von</span>
+      Goethe
+    </h1>
+    <div class="hero-dates">28. August 1749 — 22. März 1832</div>
+    <p class="hero-subtitle">
+      »Es ist nicht genug, zu wissen, man muß auch anwenden; es ist nicht genug, zu wollen, man muß auch tun.«
+    </p>
+  </div>
+
+  <div class="hero-scroll-indicator">
+    <span>Entdecken</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ QUOTE 1 ═══════════════ -->
+<section class="quote-section dark">
+  <div class="quote-ornament" style="top: -5rem; right: 5%; transform: rotate(15deg);">G</div>
+  <blockquote class="reveal">
+    <p>»Zwei Seelen wohnen, ach! in meiner Brust, die eine will sich von der andern trennen.«</p>
+    <cite>— Faust I, Vers 1112–1113</cite>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ KINDHEIT ═══════════════ -->
+<section class="bio-section" id="leben">
+  <div class="side-decoration left"></div>
+  <div class="section-inner reveal">
+    <span class="section-label">Kapitel I</span>
+    <h2 class="section-title">Kindheit und Jugend in Frankfurt</h2>
+    <span class="section-date">1749 – 1765</span>
+    <div class="bio-text">
+      <p>Johann Wolfgang Goethe wurde am 28. August 1749 in Frankfurt am Main als Sohn des kaiserlichen Rates Johann Caspar Goethe und seiner Frau Catharina Elisabeth, geborene Textor, geboren. Das Elternhaus am Großen Hirschgraben — heute als Goethe-Haus bekannt — war ein stattliches Bürgerhaus, das die gehobene gesellschaftliche Stellung der Familie widerspiegelte. Der Vater, ein strenger und gebildeter Mann, hatte die juristische Laufbahn eingeschlagen, ohne sie jemals auszuüben; stattdessen widmete er sich der Erziehung seiner Kinder mit beinahe pedantischer Gründlichkeit.</p>
+
+      <p>Die Mutter hingegen, Catharina Elisabeth — liebevoll »Frau Aja« genannt —, war eine warmherzige und fantasievolle Frau, die dem jungen Wolfgang die Freude am Geschichtenerzählen vermittelte. »Vom Vater hab ich die Statur, des Lebens ernstes Führen«, schrieb Goethe später, »vom Mütterchen die Frohnatur und Lust zu fabulieren.« Diese Dualität sollte sein gesamtes Schaffen durchziehen.</p>
+
+      <p>Von seiner Schwester Cornelia, mit der ihn eine innige Beziehung verband, sowie von Privatlehrern erhielt der junge Goethe eine umfassende Bildung in Sprachen, Zeichenkunst, Musik und Naturwissenschaften. Bereits als Kind verschlang er die Bücher der väterlichen Bibliothek und entwickelte eine unstillbare Wissbegierde. Die Besetzung Frankfurts durch französische Truppen während des Siebenjährigen Krieges brachte den Knaben in Kontakt mit dem französischen Theater — ein Erlebnis, das seine Leidenschaft für die dramatische Kunst entfachte.</p>
+
+      <p>In seinen autobiographischen Aufzeichnungen »Dichtung und Wahrheit« schildert Goethe diese prägenden Jahre mit der ihm eigenen Mischung aus Selbstironie und tiefer Empfindsamkeit. Die frühe Begegnung mit Literatur, Kunst und den gesellschaftlichen Spannungen seiner Zeit legte das Fundament für ein Lebenswerk von beispielloser Vielfalt und Tiefe.</p>
+    </div>
+  </div>
+  <div class="side-decoration right"></div>
+</section>
+
+<!-- ═══════════════ QUILL ANIMATION ═══════════════ -->
+<section class="quill-section">
+  <div class="quill-canvas">
+    <span class="quill-icon">🪶</span>
+    <div class="quill-text">»Hier bin ich Mensch, hier darf ich's sein.«</div>
+  </div>
+</section>
+
+<!-- ═══════════════ STUDIUM ═══════════════ -->
+<section class="bio-section">
+  <div class="section-inner reveal">
+    <span class="section-label">Kapitel II</span>
+    <h2 class="section-title">Studium in Leipzig und Straßburg</h2>
+    <span class="section-date">1765 – 1771</span>
+    <div class="bio-text">
+      <p>Im Herbst 1765 bezog der sechzehnjährige Goethe auf Wunsch seines Vaters die Universität Leipzig, um dort Rechtswissenschaft zu studieren. Doch das »kleine Paris«, wie Leipzig damals genannt wurde, bot dem jungen Studenten weit mehr als juristische Vorlesungen. Er besuchte Poetikvorlesungen bei Christian Fürchtegott Gellert, nahm Zeichenunterricht bei Adam Friedrich Oeser und tauchte ein in das lebhafte gesellschaftliche und kulturelle Treiben der Messestadt.</p>
+
+      <p>Die Leipziger Jahre brachten auch die erste große Liebe: Käthchen Schönkopf, die Tochter eines Gastwirts, wurde zur Muse seiner frühesten Gedichte. Die »Annette«-Lieder und das Schäferspiel »Die Laune des Verliebten« zeugen von dieser jugendlichen Leidenschaft. Gleichzeitig rang der junge Dichter mit den Konventionen des Rokoko und suchte nach einer eigenen poetischen Stimme.</p>
+
+      <p>Eine schwere Krankheit zwang Goethe 1768 zur Rückkehr nach Frankfurt. Nach seiner Genesung — die auch von einer intensiven Beschäftigung mit mystischen und alchemistischen Schriften begleitet war — setzte er sein Studium 1770 in Straßburg fort. Hier wurde die Begegnung mit Johann Gottfried Herder zum Schlüsselerlebnis: Herder öffnete ihm die Augen für Shakespeare, Homer und die Volkspoesie, für die Kraft des Originals gegenüber der Nachahmung.</p>
+
+      <p>In Straßburg erlebte Goethe auch seine leidenschaftliche Liebe zu Friederike Brion, der Pfarrerstochter aus Sesenheim. Die »Sesenheimer Lieder« — darunter »Willkommen und Abschied« und »Mailied« — markieren den Durchbruch zu einer neuen, unmittelbaren Lyrik, die die deutsche Dichtung revolutionieren sollte. Als Goethe 1771 Straßburg verließ — im Gepäck die juristische Promotion und ein gebrochenes Herz —, war er ein anderer Mensch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ QUOTE 2 ═══════════════ -->
+<section class="quote-section burgundy">
+  <div class="quote-ornament" style="bottom: -3rem; left: 8%; transform: rotate(-10deg);">W</div>
+  <blockquote class="reveal">
+    <p>»Edel sei der Mensch, hilfreich und gut! Denn das allein unterscheidet ihn von allen Wesen, die wir kennen.«</p>
+    <cite>— Das Göttliche, 1783</cite>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ STURM UND DRANG ═══════════════ -->
+<section class="bio-section">
+  <div class="side-decoration left"></div>
+  <div class="section-inner reveal">
+    <span class="section-label">Kapitel III</span>
+    <h2 class="section-title">Sturm und Drang</h2>
+    <span class="section-date">1771 – 1775</span>
+    <div class="bio-text">
+      <p>Zurück in Frankfurt eröffnete Goethe eine Anwaltskanzlei, doch seine wahre Berufung lag anderswo. Innerhalb weniger Jahre schuf er Werke, die ihn schlagartig zum berühmtesten Schriftsteller Deutschlands machten. Das Drama »Götz von Berlichingen« (1773) — mit seiner bewussten Missachtung der aristotelischen Einheiten, seiner rohen Sprachgewalt und seinem Appell an die Freiheit — wurde zum Manifest einer ganzen literarischen Bewegung: des Sturm und Drang.</p>
+
+      <p>Noch durchschlagender war der Erfolg von »Die Leiden des jungen Werthers« (1774). Dieser Briefroman, in dem sich der empfindsame Werther in die bereits verlobte Lotte verliebt und schließlich den Freitod wählt, löste eine Erschütterung aus, die weit über die literarische Welt hinausging. Junge Männer kleideten sich wie Werther in blauem Frack und gelber Weste; in ganz Europa wurde das Buch verschlungen, diskutiert, verdammt und vergöttert. Napoleon soll es siebenmal gelesen haben.</p>
+
+      <p>Die autobiographischen Bezüge des Romans — Goethes unglückliche Liebe zu Charlotte Buff in Wetzlar und der Suizid seines Bekannten Karl Wilhelm Jerusalem — verliehen dem Werk eine Unmittelbarkeit, die die Leser in ihren Bann zog. Goethe hatte eine neue literarische Sprache geschaffen: subjektiv, emotional und von einer Intensität, die das Rokoko hinter sich ließ.</p>
+
+      <p>In diese explosiven Jahre fielen auch die ersten Entwürfe zum »Faust« — dem sogenannten »Urfaust« — sowie eine Reihe bedeutender Gedichte und dramatischer Fragmente. Die Hymnen »Prometheus«, »Ganymed« und »Wandrers Sturmlied« zeigen einen Dichter auf dem Höhepunkt seiner jugendlichen Schöpferkraft. Gleichzeitig mehrten sich die Liebesaffären — unter anderem mit Lili Schönemann, einer Frankfurter Bankierstochter, mit der er sich verlobte und die Verlobung wieder löste.</p>
+    </div>
+  </div>
+  <div class="side-decoration right"></div>
+</section>
+
+<!-- ═══════════════ 3D BOOK ═══════════════ -->
+<section class="book-section">
+  <h2 class="reveal">Das Buch der Bücher</h2>
+  <div class="book-3d" id="book3d">
+    <div class="book-cover">
+      <div class="cover-border"></div>
+      <div class="cover-border-inner"></div>
+      <div class="cover-ornament-top">✦ ✦ ✦</div>
+      <h3>Faust<br><small style="font-weight:400; font-size:0.7em;">Eine Tragödie</small></h3>
+      <div class="cover-author">Goethe</div>
+      <div class="cover-ornament-bottom">✦ ✦ ✦</div>
+    </div>
+    <div class="book-spine">
+      <span>GOETHE · FAUST</span>
+    </div>
+    <div class="book-pages"></div>
+    <div class="book-back"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ WEIMAR ═══════════════ -->
+<section class="bio-section">
+  <div class="section-inner reveal">
+    <span class="section-label">Kapitel IV</span>
+    <h2 class="section-title">Weimarer Jahre und Italienische Reise</h2>
+    <span class="section-date">1775 – 1790</span>
+    <div class="bio-text">
+      <p>Im November 1775 folgte Goethe einer Einladung des jungen Herzogs Carl August nach Weimar — was als kurzer Besuch geplant war, wurde zur Lebensentscheidung. In der kleinen thüringischen Residenzstadt übernahm der Dichter bald weitreichende Regierungsaufgaben: Er leitete den Bergbau in Ilmenau, verwaltete das Wegenetz und die Finanzen, reformierte die Universität Jena und beriet den Herzog in Fragen der Staatsführung. 1782 wurde er in den Adelsstand erhoben.</p>
+
+      <p>Die Beziehung zu Charlotte von Stein — der um sieben Jahre älteren Hofdame — prägte ein ganzes Jahrzehnt seines Lebens. Über 1.700 Briefe an sie bezeugen eine Liebe von seltener intellektueller und emotionaler Tiefe. Unter ihrem Einfluss reifte der stürmische Genius zum klassischen Künstler. Doch die Regierungsgeschäfte zehrten an seinen schöpferischen Kräften; er begann sich in einem goldenen Käfig zu fühlen.</p>
+
+      <p>Am 3. September 1786 brach Goethe heimlich und fluchtartig nach Italien auf — eine Reise, die fast zwei Jahre dauern und sein Leben und Schaffen grundlegend verwandeln sollte. In Rom, Neapel und Sizilien studierte er die Antike, zeichnete unermüdlich, vollendete die »Iphigenie auf Tauris« in Versform und arbeitete am »Egmont« und am »Tasso«. Die Begegnung mit der antiken Kunst und der südlichen Natur wurde für ihn zur Wiedergeburt: »Ich zähle meinen zweiten Geburtstag, eine wahre Wiedergeburt, von dem Tage, da ich Rom betrat.«</p>
+
+      <p>Nach seiner Rückkehr nach Weimar 1788 war Goethe ein verwandelter Mensch. Er zog sich weitgehend aus den Regierungsgeschäften zurück und begann eine Lebensgemeinschaft mit Christiane Vulpius, die er erst 1806 heiratete. Die Beziehung zu Charlotte von Stein zerbrach. In den »Römischen Elegien« — einer Sammlung erotisch-elegischer Gedichte in antiker Form — feierte er die sinnliche Erfahrung Italiens und seiner neuen Liebe.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PORTRAIT PARALLAX ═══════════════ -->
+<section class="portrait-section">
+  <div class="portrait-bg" id="parallaxBg1">
+    <div class="css-portrait">
+      <div class="layer layer-1"></div>
+      <div class="layer layer-2"></div>
+      <div class="layer layer-3"></div>
+    </div>
+    <svg width="100%" height="100%" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" style="position:absolute; inset:0;">
+      <defs>
+        <pattern id="diag" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="20" stroke="#C5A55A" stroke-opacity="0.05" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#diag)"/>
+    </svg>
+  </div>
+  <div class="portrait-overlay"></div>
+  <div class="portrait-content reveal">
+    <h2>Weimarer Klassik</h2>
+    <p>»Wer sich den Gesetzen nicht fügen will, muß die Gegend verlassen, wo sie gelten.«</p>
+  </div>
+</section>
+
+<!-- ═══════════════ KLASSIK & SPÄTWERK ═══════════════ -->
+<section class="bio-section">
+  <div class="side-decoration left"></div>
+  <div class="section-inner reveal">
+    <span class="section-label">Kapitel V</span>
+    <h2 class="section-title">Klassik und Spätwerk</h2>
+    <span class="section-date">1790 – 1832</span>
+    <div class="bio-text">
+      <p>Die Begegnung mit Friedrich Schiller im Jahr 1794 markierte den Beginn einer der produktivsten Dichterfreundschaften der Literaturgeschichte. Über zehn Jahre lang — bis zu Schillers Tod 1805 — inspirierten, kritisierten und förderten sich die beiden gegenseitig in einem unablässigen Austausch von Ideen und Manuskripten. Gemeinsam schufen sie die »Xenien«, jene satirischen Epigramme, die das literarische Deutschland in Aufruhr versetzten.</p>
+
+      <p>Unter dem Eindruck dieser Freundschaft vollendete Goethe den »Wilhelm Meister«-Roman, schrieb die Ballade »Der Zauberlehrling«, den »Erlkönig« war bereits 1782 entstanden, und trieb die Arbeit am »Faust« voran. Der erste Teil der Tragödie — »Faust. Der Tragödie erster Teil« — erschien 1808 und gilt als das bedeutendste Werk der deutschen Literatur. In der Geschichte des Gelehrten, der seine Seele dem Teufel verschreibt, um das Wesen der Welt zu ergründen, verdichtete Goethe die zentralen Fragen der menschlichen Existenz.</p>
+
+      <p>Die Napoleonischen Kriege trafen Weimar hart — nach der Schlacht bei Jena 1806 drangen französische Soldaten in Goethes Haus ein, und nur Christianes Mut rettete die Situation. Die spätere Begegnung mit Napoleon in Erfurt 1808 wurde legendär: »Vous êtes un homme!«, soll der Kaiser gesagt haben. Goethe war von Napoleons Persönlichkeit beeindruckt und weigerte sich, in den nationalistischen Chor seiner Landsleute einzustimmen.</p>
+
+      <p>Im Alter wandte sich Goethe zunehmend dem Orient zu. Der »West-östliche Divan« (1819) — inspiriert von der Dichtung des persischen Lyrikers Hafis und von seiner späten Liebe zu Marianne von Willemer — ist ein Gipfelwerk der Weltliteratur, das östliche und westliche Traditionen in einem einzigartigen poetischen Dialog vereint. Gleichzeitig arbeitete er unermüdlich am zweiten Teil des »Faust«, der erst nach seinem Tod veröffentlicht werden sollte.</p>
+
+      <p>»Faust II« — vollendet im Jahr 1831 — ist ein rätselhaftes, vielschichtiges Alterswerk, das Mythologie, Politik, Ökonomie und Poesie zu einem grandiosen Panorama verwebt. Mit Fausts letzten Worten — »Verweile doch, du bist so schön!« — schließt sich der Kreis eines Lebenswerkes, das die Grenzen menschlicher Erkenntnis und Schöpferkraft auslotet.</p>
+    </div>
+  </div>
+  <div class="side-decoration right"></div>
+</section>
+
+<!-- ═══════════════ QUOTE 3 ═══════════════ -->
+<section class="quote-section forest">
+  <div class="quote-ornament" style="top: 2rem; right: 10%; transform: rotate(8deg);">F</div>
+  <blockquote class="reveal">
+    <p>»Wer immer strebend sich bemüht, den können wir erlösen.«</p>
+    <cite>— Faust II, Vers 11936–11937</cite>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ TIMELINE ═══════════════ -->
+<section class="timeline-section" id="zeitstrahl">
+  <h2 class="reveal">Lebensstationen</h2>
+  <p class="section-subtitle reveal">Ein Leben zwischen Dichtung und Wahrheit</p>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1749</div>
+        <div class="timeline-title">Geburt in Frankfurt am Main</div>
+        <div class="timeline-desc">Am 28. August als Sohn einer wohlhabenden Familie im Haus am Großen Hirschgraben geboren.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1765</div>
+        <div class="timeline-title">Studium in Leipzig</div>
+        <div class="timeline-desc">Studiert Jura, besucht aber vor allem Literatur- und Kunstvorlesungen. Erste Liebesgedichte.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1770</div>
+        <div class="timeline-title">Straßburg und Herder</div>
+        <div class="timeline-desc">Begegnung mit Herder verändert sein Kunstverständnis grundlegend. Liebe zu Friederike Brion.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1773</div>
+        <div class="timeline-title">Götz von Berlichingen</div>
+        <div class="timeline-desc">Das Drama macht ihn zum Anführer des Sturm und Drang.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1774</div>
+        <div class="timeline-title">Die Leiden des jungen Werthers</div>
+        <div class="timeline-desc">Europäischer Sensationserfolg. Goethe wird zum berühmtesten Schriftsteller seiner Zeit.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1775</div>
+        <div class="timeline-title">Ankunft in Weimar</div>
+        <div class="timeline-desc">Auf Einladung des Herzogs Carl August. Beginn einer lebenslangen Verbindung.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1786</div>
+        <div class="timeline-title">Flucht nach Italien</div>
+        <div class="timeline-desc">Heimlicher Aufbruch. Zwei Jahre Studium der Antike in Rom, Neapel und Sizilien.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1794</div>
+        <div class="timeline-title">Freundschaft mit Schiller</div>
+        <div class="timeline-desc">Beginn des produktivsten Jahrzehnts. Gemeinsame Arbeit an Balladen, Xenien, Zeitschriften.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1808</div>
+        <div class="timeline-title">Faust I erscheint</div>
+        <div class="timeline-desc">Das Hauptwerk der deutschen Literatur wird veröffentlicht. Begegnung mit Napoleon in Erfurt.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1819</div>
+        <div class="timeline-title">West-östlicher Divan</div>
+        <div class="timeline-desc">Poetischer Dialog zwischen Orient und Okzident. Inspiriert durch Hafis und Marianne von Willemer.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1831</div>
+        <div class="timeline-title">Vollendung des Faust II</div>
+        <div class="timeline-desc">Das versiegelte Manuskript wird erst nach seinem Tod veröffentlicht.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div>
+        <div class="timeline-year">1832</div>
+        <div class="timeline-title">Tod in Weimar</div>
+        <div class="timeline-desc">Am 22. März stirbt Goethe in seinem Haus am Frauenplan. Letzte Worte: »Mehr Licht!«</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ QUOTE 4 ═══════════════ -->
+<section class="quote-section dark">
+  <blockquote class="reveal">
+    <p>»Man sieht nur, was man weiß.«</p>
+    <cite>— Gespräch mit Eckermann</cite>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ WERKE ═══════════════ -->
+<section class="werke-section" id="werke">
+  <h2 class="reveal">Werkübersicht</h2>
+  <p class="section-subtitle reveal">Die bedeutendsten Schöpfungen eines universalen Geistes</p>
+
+  <div class="werke-grid">
+    <div class="werk-card">
+      <span class="werk-genre">Briefroman</span>
+      <h3>Die Leiden des jungen Werthers</h3>
+      <span class="werk-year">1774</span>
+      <p class="werk-desc">Der Roman, der Europa erschütterte. In Briefform erzählt Goethe die Geschichte einer unmöglichen Liebe, die im Suizid endet. Werthers Gefühlswelt — seine Naturbegeisterung, seine Verzweiflung, sein Aufbegehren gegen gesellschaftliche Konventionen — traf den Nerv einer ganzen Generation. Das Werk begründete den Ruf Goethes als Genie und löste eine beispiellose »Werther-Manie« aus.</p>
+      <div class="werk-icon">📖</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Tragödie</span>
+      <h3>Faust. Der Tragödie erster Teil</h3>
+      <span class="werk-year">1808</span>
+      <p class="werk-desc">Das Lebenswerk, an dem Goethe über sechzig Jahre arbeitete. Der Gelehrte Heinrich Faust, unzufrieden mit den Grenzen menschlichen Wissens, schließt einen Pakt mit dem Teufel Mephistopheles. Die Gretchentragödie — eine der ergreifendsten Liebesgeschichten der Weltliteratur — bildet das emotionale Zentrum des ersten Teils.</p>
+      <div class="werk-icon">🎭</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Tragödie</span>
+      <h3>Faust. Der Tragödie zweiter Teil</h3>
+      <span class="werk-year">1832 (postum)</span>
+      <p class="werk-desc">Das monumentale Alterswerk führt Faust durch die Welt der antiken Mythologie, der Politik und der großen Utopien. In fünf Akten entfaltet Goethe ein allegorisches Panorama der abendländischen Kultur. Die »Klassische Walpurgisnacht« und die Helena-Handlung gehören zu den kühnsten Schöpfungen der deutschen Literatur.</p>
+      <div class="werk-icon">✨</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Bildungsroman</span>
+      <h3>Wilhelm Meisters Lehrjahre</h3>
+      <span class="werk-year">1795/96</span>
+      <p class="werk-desc">Der prototypische deutsche Bildungsroman begleitet den jungen Wilhelm Meister auf seiner Suche nach Selbstverwirklichung — vom Kaufmannssohn über den Theaterdirektor bis zum Mitglied der geheimnisvollen »Turmgesellschaft«. Friedrich Schlegel nannte das Werk neben der Französischen Revolution und Fichtes Wissenschaftslehre eine der »größten Tendenzen des Zeitalters«.</p>
+      <div class="werk-icon">📚</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Bildungsroman</span>
+      <h3>Wilhelm Meisters Wanderjahre</h3>
+      <span class="werk-year">1821/29</span>
+      <p class="werk-desc">Die Fortsetzung der »Lehrjahre« — ein experimenteller, fragmentarischer Roman, der Novellen, Aphorismen und Reflexionen zu einem rätselhaften Ganzen verwebt. Themen wie Erziehung, Handwerk, Entsagung und die Herausforderungen der beginnenden Industrialisierung machen das Werk zu einem überraschend modernen Text.</p>
+      <div class="werk-icon">🗺️</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Lyriksammlung</span>
+      <h3>West-östlicher Divan</h3>
+      <span class="werk-year">1819</span>
+      <p class="werk-desc">Inspiriert vom persischen Dichter Hafis schuf Goethe eine einzigartige Verbindung orientalischer und okzidentaler Poesie. Das »Buch Suleika« — entstanden aus dem Dialog mit Marianne von Willemer, die selbst Gedichte zum Divan beitrug — enthält einige der schönsten Liebesgedichte der deutschen Sprache. Ein visionäres Werk interkulturellen Dialogs.</p>
+      <div class="werk-icon">🌙</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Drama</span>
+      <h3>Iphigenie auf Tauris</h3>
+      <span class="werk-year">1787</span>
+      <p class="werk-desc">Goethes klassischstes Drama — ein Werk von makelloser formaler Schönheit. Die griechische Priesterin Iphigenie bricht den Fluch der Tantaliden nicht durch Gewalt, sondern durch Wahrhaftigkeit und humane Größe. In fünffüßigen Jamben von kristalliner Klarheit formuliert Goethe sein Ideal einer durch Menschlichkeit geläuterten Welt.</p>
+      <div class="werk-icon">🏛️</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Drama</span>
+      <h3>Torquato Tasso</h3>
+      <span class="werk-year">1790</span>
+      <p class="werk-desc">Das zutiefst autobiographische Drama über den italienischen Renaissancedichter spiegelt Goethes eigene Erfahrung als Künstler am Weimarer Hof. Der Konflikt zwischen poetischer Genialität und gesellschaftlichen Zwängen, zwischen Kunst und Leben, wird mit psychologischer Tiefe und sprachlicher Meisterschaft entfaltet.</p>
+      <div class="werk-icon">🎪</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Roman</span>
+      <h3>Die Wahlverwandtschaften</h3>
+      <span class="werk-year">1809</span>
+      <p class="werk-desc">Ein chemisches Gleichnis wird zur Metapher für die Leidenschaften: Zwei Ehepaare geraten in den Strudel einer unaufhaltsamen Anziehungskraft. Goethe verhandelt die Frage, ob es ein Naturgesetz der Liebe gibt, das stärker ist als Moral und Konvention. Ein zutiefst moderner Roman über Freiheit, Bindung und Schicksal.</p>
+      <div class="werk-icon">⚗️</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Autobiographie</span>
+      <h3>Dichtung und Wahrheit</h3>
+      <span class="werk-year">1811–1833</span>
+      <p class="werk-desc">Goethes monumentale Autobiographie umfasst die ersten sechsundzwanzig Lebensjahre — von der Kindheit in Frankfurt bis zur Abreise nach Weimar. Mit der ihm eigenen Mischung aus Selbstbeobachtung und Weltanschauung verwebt er persönliche Erinnerung mit Epochenporträt. Der Titel ist Programm: Wahrheit und Erfindung durchdringen einander untrennbar.</p>
+      <div class="werk-icon">🪞</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Reisebericht</span>
+      <h3>Italienische Reise</h3>
+      <span class="werk-year">1816/17</span>
+      <p class="werk-desc">Goethes Bericht seiner Flucht nach Italien (1786–1788) ist weit mehr als ein Reisetagebuch. Es ist die Geschichte einer künstlerischen Wiedergeburt, einer Befreiung durch die Begegnung mit der antiken Kunst, dem südlichen Licht und einer Lebensfreude, die den Norden hinter sich lässt. »Auch ich in Arkadien!«</p>
+      <div class="werk-icon">🌿</div>
+    </div>
+
+    <div class="werk-card">
+      <span class="werk-genre">Drama</span>
+      <h3>Götz von Berlichingen</h3>
+      <span class="werk-year">1773</span>
+      <p class="werk-desc">Das Drama um den fränkischen Ritter, der gegen Fürstenwillkür und für seine Freiheit kämpft, sprengte alle dramaturgischen Konventionen. Über fünfzig Szenen, Ortswechsel im Sekundentakt, eine ungeschliffene, lebendige Sprache: Goethe schuf das Sturm-und-Drang-Drama schlechthin. »Er! Er! Wo hat der Junge diese Kraft her?«, staunte Herder.</p>
+      <div class="werk-icon">⚔️</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ QUOTE 5 ═══════════════ -->
+<section class="quote-section burgundy">
+  <blockquote class="reveal">
+    <p>»Nur wer die Sehnsucht kennt, weiß, was ich leide!«</p>
+    <cite>— Wilhelm Meisters Lehrjahre, Mignon-Lied</cite>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ GEDICHTE ═══════════════ -->
+<section class="gedichte-section" id="gedichte">
+  <h2 class="reveal">Lyrik und Balladen</h2>
+
+  <div class="gedichte-grid">
+    <div class="gedicht-card">
+      <h3>Erlkönig</h3>
+      <span class="gedicht-year">1782</span>
+      <div class="gedicht-excerpt">
+        »Wer reitet so spät durch Nacht und Wind?<br>
+        Es ist der Vater mit seinem Kind;«
+      </div>
+      <p class="gedicht-info">Die berühmteste Ballade der deutschen Sprache. Ein Vater reitet mit seinem fiebernden Kind durch die Nacht. Das Kind sieht den Erlkönig, der es zu sich lockt. Goethe gestaltete die Todesangst des Kindes und die ratlose Verzweiflung des Vaters in atemloser, dialogischer Dramatik.</p>
+    </div>
+
+    <div class="gedicht-card">
+      <h3>Der Zauberlehrling</h3>
+      <span class="gedicht-year">1797</span>
+      <div class="gedicht-excerpt">
+        »Hat der alte Hexenmeister<br>
+        sich doch einmal wegbegeben!«
+      </div>
+      <p class="gedicht-info">In der Abwesenheit seines Meisters beschwört der Lehrling einen Besen — und verliert die Kontrolle. Die Ballade, im »Balladenjahr« gemeinsam mit Schiller entstanden, wurde zur Parabel für menschliche Hybris und die Gefahren unkontrollierter Kräfte.</p>
+    </div>
+
+    <div class="gedicht-card">
+      <h3>Prometheus</h3>
+      <span class="gedicht-year">1774</span>
+      <div class="gedicht-excerpt">
+        »Bedecke deinen Himmel, Zeus,<br>
+        mit Wolkendunst!«
+      </div>
+      <p class="gedicht-info">Die trotzige Hymne an den Titanengeist — ein Manifest des Sturm und Drang. Prometheus, der Menschenschöpfer, wirft den Göttern seine Verachtung ins Gesicht. Das Gedicht löste bei seiner Veröffentlichung einen Skandal aus und gilt als eines der kühnsten Gedichte der deutschen Literatur.</p>
+    </div>
+
+    <div class="gedicht-card">
+      <h3>Wandrers Nachtlied II</h3>
+      <span class="gedicht-year">1780</span>
+      <div class="gedicht-excerpt">
+        »Über allen Gipfeln<br>
+        ist Ruh,<br>
+        in allen Wipfeln<br>
+        spürest du<br>
+        kaum einen Hauch;«
+      </div>
+      <p class="gedicht-info">Acht Verse, an die Wand einer Berghütte geschrieben — und damit unsterblich. Dieses Gedicht, eines der vollkommensten der deutschen Sprache, fasst die Erfahrung kosmischer Stille in Worte von absoluter Einfachheit. »Warte nur, balde ruhest du auch.«</p>
+    </div>
+
+    <div class="gedicht-card">
+      <h3>Willkommen und Abschied</h3>
+      <span class="gedicht-year">1771</span>
+      <div class="gedicht-excerpt">
+        »Es schlug mein Herz, geschwind zu Pferde!<br>
+        Es war getan fast eh gedacht.«
+      </div>
+      <p class="gedicht-info">Eines der Sesenheimer Lieder, inspiriert von Friederike Brion. Der stürmische Ritt zum Geliebten, die Seligkeit des Wiedersehens und der Schmerz des Abschieds — in diesem Gedicht erfand Goethe die moderne Erlebnislyrik.</p>
+    </div>
+
+    <div class="gedicht-card">
+      <h3>Römische Elegien</h3>
+      <span class="gedicht-year">1790</span>
+      <div class="gedicht-excerpt">
+        »Froh empfind ich mich nun auf klassischem Boden begeistert,<br>
+        Vor- und Mitwelt spricht lauter und reizender mir.«
+      </div>
+      <p class="gedicht-info">In elegischen Distichen nach dem Vorbild der römischen Liebeslyrik verschmelzen Antikenstudium und erotische Erfahrung. Die Elegien, die bei Erscheinen als skandalös galten, gehören zum Sinnlichsten, was Goethe je geschrieben hat.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ERLKÖNIG VOLLTEXT ═══════════════ -->
+<section class="poem-full-section dark-poem reveal">
+  <div class="poem-inner">
+    <div class="poem-header">
+      <h2>Erlkönig</h2>
+      <span class="poem-year">1782</span>
+    </div>
+    <p class="poem-intro">Die berühmteste Ballade der deutschen Sprache — vertont von Franz Schubert, rezitiert in jeder Schule, unsterblich in ihrer atemlosen Dramatik.</p>
+    <div class="poem-verses">
+      <div class="stanza">
+        <span class="speaker">Erzähler</span>
+        Wer reitet so spät durch Nacht und Wind?<br>
+        Es ist der Vater mit seinem Kind;<br>
+        Er hat den Knaben wohl in dem Arm,<br>
+        Er faßt ihn sicher, er hält ihn warm.
+      </div>
+      <div class="stanza">
+        <span class="speaker">Vater</span>
+        Mein Sohn, was birgst du so bang dein Gesicht? —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Sohn</span>
+        Siehst, Vater, du den Erlkönig nicht?<br>
+        Den Erlenkönig mit Kron' und Schweif? —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Vater</span>
+        Mein Sohn, es ist ein Nebelstreif. —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Erlkönig</span>
+        »Du liebes Kind, komm, geh mit mir!<br>
+        Gar schöne Spiele spiel' ich mit dir;<br>
+        Manch bunte Blumen sind an dem Strand,<br>
+        Meine Mutter hat manch gülden Gewand.« —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Sohn</span>
+        Mein Vater, mein Vater, und hörest du nicht,<br>
+        Was Erlenkönig mir leise verspricht? —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Vater</span>
+        Sei ruhig, bleibe ruhig, mein Kind;<br>
+        In dürren Blättern säuselt der Wind. —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Erlkönig</span>
+        »Willst, feiner Knabe, du mit mir gehn?<br>
+        Meine Töchter sollen dich warten schön;<br>
+        Meine Töchter führen den nächtlichen Reihn<br>
+        Und wiegen und tanzen und singen dich ein.« —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Sohn</span>
+        Mein Vater, mein Vater, und siehst du nicht dort<br>
+        Erlkönigs Töchter am düstern Ort? —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Vater</span>
+        Mein Sohn, mein Sohn, ich seh' es genau:<br>
+        Es scheinen die alten Weiden so grau. —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Erlkönig</span>
+        »Ich liebe dich, mich reizt deine schöne Gestalt;<br>
+        Und bist du nicht willig, so brauch' ich Gewalt.« —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Sohn</span>
+        Mein Vater, mein Vater, jetzt faßt er mich an!<br>
+        Erlkönig hat mir ein Leids getan! —
+      </div>
+      <div class="stanza">
+        <span class="speaker">Erzähler</span>
+        Dem Vater grauset's; er reitet geschwind,<br>
+        Er hält in Armen das ächzende Kind,<br>
+        Erreicht den Hof mit Mühe und Not;<br>
+        In seinen Armen das Kind war tot.
+      </div>
+    </div>
+    <p class="poem-note">Die Ballade entstand 1782 für das Singspiel »Die Fischerin«. Franz Schuberts Vertonung (1815) machte sie weltberühmt. Der Dialog zwischen Vater, Sohn und Erlkönig erzeugt eine Spannung, die mit der lakonischen Schlusszeile ihren erschütternden Höhepunkt findet.</p>
+  </div>
+</section>
+
+<div class="ornament-line"><span>✦</span></div>
+
+<!-- ═══════════════ ZAUBERLEHRLING VOLLTEXT ═══════════════ -->
+<section class="poem-full-section dark-poem reveal">
+  <div class="poem-inner">
+    <div class="poem-header">
+      <h2>Der Zauberlehrling</h2>
+      <span class="poem-year">1797</span>
+    </div>
+    <p class="poem-intro">Im »Balladenjahr« 1797 gemeinsam mit Schiller entstanden — eine Parabel über menschliche Hybris, die bis heute nichts von ihrer Aktualität verloren hat.</p>
+    <div class="poem-verses">
+      <div class="stanza">
+        Hat der alte Hexenmeister<br>
+        sich doch einmal wegbegeben!<br>
+        Und nun sollen seine Geister<br>
+        auch nach meinem Willen leben.<br>
+        Seine Wort' und Werke<br>
+        merkt ich und den Brauch,<br>
+        und mit Geistesstärke<br>
+        tu ich Wunder auch.
+      </div>
+      <div class="stanza">
+        Walle! walle<br>
+        Manche Strecke,<br>
+        daß, zum Zwecke,<br>
+        Wasser fließe<br>
+        und mit reichem, vollem Schwalle<br>
+        zu dem Bade sich ergieße.
+      </div>
+      <div class="stanza">
+        Und nun komm, du alter Besen!<br>
+        Nimm die schlechten Lumpenhüllen;<br>
+        bist schon lange Knecht gewesen:<br>
+        nun erfülle meinen Willen!<br>
+        Auf zwei Beinen stehe,<br>
+        oben sei ein Kopf,<br>
+        eile nun und gehe<br>
+        mit dem Wassertopf!
+      </div>
+      <div class="stanza">
+        Walle! walle<br>
+        Manche Strecke,<br>
+        daß, zum Zwecke,<br>
+        Wasser fließe<br>
+        und mit reichem, vollem Schwalle<br>
+        zu dem Bade sich ergieße.
+      </div>
+      <div class="stanza">
+        Seht, er läuft zum Ufer nieder,<br>
+        Wahrlich! ist schon an dem Flusse,<br>
+        und mit Blitzesschnelle wieder<br>
+        ist er hier mit raschem Gusse.<br>
+        Schon zum zweiten Male!<br>
+        Wie das Becken schwillt!<br>
+        Wie sich jede Schale<br>
+        voll mit Wasser füllt!
+      </div>
+      <div class="stanza">
+        Stehe! stehe!<br>
+        denn wir haben<br>
+        deiner Gaben<br>
+        vollgemessen! —<br>
+        Ach, ich merk es! Wehe! wehe!<br>
+        Hab ich doch das Wort vergessen!
+      </div>
+      <div class="stanza">
+        Ach, das Wort, worauf am Ende<br>
+        er das wird, was er gewesen.<br>
+        Ach, er läuft und bringt behende!<br>
+        Wärst du doch der alte Besen!<br>
+        Immer neue Güsse<br>
+        bringt er schnell herein,<br>
+        Ach! und hundert Flüsse<br>
+        stürzen auf mich ein.
+      </div>
+      <div class="stanza">
+        Nein, nicht länger<br>
+        kann ich's lassen;<br>
+        will ihn fassen.<br>
+        Das ist Tücke!<br>
+        Ach! nun wird mir immer bänger!<br>
+        Welche Miene! welche Blicke!
+      </div>
+      <div class="stanza">
+        O du Ausgeburt der Hölle!<br>
+        Soll das ganze Haus ersaufen?<br>
+        Seh ich über jede Schwelle<br>
+        doch schon Wasserströme laufen.<br>
+        Ein verruchter Besen,<br>
+        der nicht hören will!<br>
+        Stock, der du gewesen,<br>
+        steh doch wieder still!
+      </div>
+      <div class="stanza">
+        Willst's am Ende<br>
+        gar nicht lassen?<br>
+        Will dich fassen,<br>
+        will dich halten<br>
+        und das alte Holz behende<br>
+        mit dem scharfen Beile spalten.
+      </div>
+      <div class="stanza">
+        Seht da kommt er schleppend wieder!<br>
+        Wie ich mich nun auf dich werfe,<br>
+        gleich, o Kobold, liegst du nieder;<br>
+        krachend trifft die glatte Schärfe.<br>
+        Wahrlich, brav getroffen!<br>
+        Seht, er ist entzwei!<br>
+        Und nun kann ich hoffen,<br>
+        und ich atme frei!
+      </div>
+      <div class="stanza">
+        Wehe! wehe!<br>
+        Beide Teile<br>
+        stehn in Eile<br>
+        schon als Knechte<br>
+        völlig fertig in die Höhe!<br>
+        Helft mir, ach! ihr hohen Mächte!
+      </div>
+      <div class="stanza">
+        Und sie laufen! Naß und nässer<br>
+        wird's im Saal und auf den Stufen.<br>
+        Welch entsetzliches Gewässer!<br>
+        Herr und Meister! hör mich rufen! —<br>
+        Ach, da kommt der Meister!<br>
+        Herr, die Not ist groß!<br>
+        Die ich rief, die Geister<br>
+        werd ich nun nicht los.
+      </div>
+      <div class="stanza">
+        <span class="speaker">Meister</span>
+        »In die Ecke,<br>
+        Besen! Besen!<br>
+        Seid's gewesen.<br>
+        Denn als Geister<br>
+        ruft euch nur, zu seinem Zwecke,<br>
+        erst hervor der alte Meister.«
+      </div>
+    </div>
+    <p class="poem-note">Die Ballade basiert auf einem Motiv aus Lukians »Philopseudes« (2. Jh. n. Chr.). Die letzte Strophe — die Rückkehr des Meisters — wurde zum geflügelten Wort. Walt Disneys »Fantasia« (1940) mit Mickey Mouse machte den Stoff weltweit populär.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ QUOTE 6 ═══════════════ -->
+<section class="quote-section dark">
+  <blockquote class="reveal">
+    <p>»Über allen Gipfeln ist Ruh, in allen Wipfeln spürest du kaum einen Hauch.«</p>
+    <cite>— Wandrers Nachtlied II, 1780</cite>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ NATURWISSENSCHAFT ═══════════════ -->
+<section class="science-section" id="wissenschaft">
+  <div class="section-inner">
+    <h2 class="reveal">Der Naturforscher</h2>
+    <p class="section-subtitle reveal">»Die Natur ist das einzige Buch, das auf allen Blättern großen Gehalt bietet.«</p>
+
+    <div class="farbenlehre-visual reveal"></div>
+
+    <div class="science-text reveal">
+      <p>Goethe verstand sich nicht nur als Dichter, sondern ebenso als Naturforscher — und er betrachtete seine wissenschaftlichen Arbeiten keineswegs als Nebenbeschäftigung. »Auf alles, was ich als Poet geleistet habe, bilde ich mir gar nichts ein«, gestand er Eckermann, »aber daß ich in meinem Jahrhundert in der Farbenlehre der einzige bin, der das Richtige weiß, darauf tue ich mir etwas zugute.«</p>
+
+      <p>Die »Zur Farbenlehre« (1810), sein umfangreichstes Werk, war als Gegenentwurf zu Newtons Optik konzipiert. Während Newton das weiße Licht als Zusammensetzung der Spektralfarben erklärte, betrachtete Goethe die Farben als Phänomene, die aus dem Zusammenspiel von Licht und Finsternis entstehen. Die Physik hat Newton recht gegeben — doch Goethes phänomenologischer Ansatz, seine Aufmerksamkeit für die subjektive Farbwahrnehmung, beeinflusste Denker von Schopenhauer über Wittgenstein bis zur modernen Farbpsychologie.</p>
+
+      <p>In der Morphologie — ein Begriff, den Goethe selbst prägte — leistete er Bedeutendes. Seine Entdeckung des Zwischenkieferknochens beim Menschen (1784) bewies die anatomische Verwandtschaft zwischen Mensch und Tier und nahm Erkenntnisse der Evolutionstheorie vorweg. Die »Metamorphose der Pflanzen« (1790) entwickelte die Idee einer »Urpflanze«, aus der sich alle pflanzlichen Formen ableiten lassen — ein Gedanke, der die Botanik nachhaltig beeinflusste.</p>
+
+      <p>Goethe betrieb ferner Studien zur Geologie, Mineralogie, Meteorologie und vergleichenden Anatomie. Er sammelte über 17.000 Mineralien und unterhielt eine umfangreiche naturwissenschaftliche Korrespondenz. Sein ganzheitlicher Ansatz — die Überzeugung, dass Natur nicht allein durch Zerlegung, sondern vor allem durch anschauende Betrachtung verstanden werden kann — macht ihn zu einem Vorläufer der modernen Ökologie und Systemtheorie.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ VERMÄCHTNIS ═══════════════ -->
+<section class="legacy-section" id="vermaechtnis">
+  <div class="section-inner reveal">
+    <h2>Tod und Vermächtnis</h2>
+    <div class="legacy-dates">22. März 1832 — Weimar</div>
+
+    <p>Die letzten Lebensjahre Goethes waren von Verlusten überschattet — der Tod seines Sohnes August 1830 in Rom traf ihn schwer. Dennoch arbeitete er mit ungebrochener Disziplin an der Vollendung des »Faust II« und an seinen naturwissenschaftlichen Studien. Am 22. März 1832, gegen halb zwölf Uhr mittags, starb Johann Wolfgang von Goethe in seinem Lehnstuhl im Haus am Frauenplan. Seine letzten Worte — »Mehr Licht!« — wurden zum Mythos.</p>
+
+    <p>Was Goethe hinterließ, ist von kaum zu ermessendem Reichtum: ein lyrisches Werk, das die deutsche Sprache auf ihren Gipfel führte; Dramen, die zu den größten der Weltliteratur zählen; Romane, die ganze Gattungen begründeten; naturwissenschaftliche Studien, die Denker bis heute inspirieren; und eine Korrespondenz von über 12.000 Briefen, die ein halbes Jahrhundert europäischer Geistesgeschichte dokumentiert.</p>
+
+    <p>»Goethe«, schrieb Thomas Mann, »repräsentiert den Augenblick der deutschen Geschichte, in dem die deutsche Bildung Weltkultur wird.« Er war der letzte Universalgelehrte, der Dichter und Staatsmann, Naturforscher und Kunsttheoretiker, Liebender und Weiser in einer Person vereinte. Sein Werk bleibt, was er selbst von allem großen Schaffen forderte: lebendig.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ FINAL QUOTE ═══════════════ -->
+<section class="quote-section dark" style="padding: 8rem 2rem;">
+  <blockquote class="reveal">
+    <p>»Mehr Licht!«</p>
+    <cite>— Letzte Worte, 22. März 1832</cite>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-ornament">✦ ✦ ✦</div>
+  <p>Johann Wolfgang von Goethe · 1749–1832</p>
+  <p class="footer-quote">»Was man nicht versteht, besitzt man nicht.«</p>
+</footer>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Loader ──
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 1200);
+  });
+
+  // ── Floating Elements ──
+  const floatingContainer = document.getElementById('floatingEls');
+  const floatingTexts = ['Faust', 'Werther', 'Divan', 'Iphigenie', 'Erlkönig', 'Prometheus', 'Tasso', 'Mignon', 'Licht', 'Seele'];
+  floatingTexts.forEach((text, i) => {
+    const el = document.createElement('div');
+    el.className = 'floating-el';
+    el.textContent = text;
+    el.style.left = Math.random() * 100 + '%';
+    el.style.fontSize = (1 + Math.random() * 2) + 'rem';
+    el.style.animationDelay = (i * 2 + Math.random() * 5) + 's';
+    el.style.animationDuration = (15 + Math.random() * 15) + 's';
+    floatingContainer.appendChild(el);
+  });
+
+  // ── Scroll Reveal ──
+  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .timeline-item, .werk-card, .gedicht-card');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        const delay = entry.target.dataset.delay || 0;
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.02,
+    rootMargin: '0px 0px -30px 0px'
+  });
+
+  revealElements.forEach((el, i) => {
+    // Stagger cards and timeline items
+    if (el.classList.contains('werk-card') || el.classList.contains('gedicht-card')) {
+      el.dataset.delay = (i % 4) * 120;
+    } else if (el.classList.contains('timeline-item')) {
+      el.dataset.delay = (i % 6) * 150;
+    }
+    observer.observe(el);
+  });
+
+  // ── Nav Scroll ──
+  const nav = document.getElementById('mainNav');
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (scrollY > 80) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+    lastScroll = scrollY;
+  }, { passive: true });
+
+  // ── 3D Book Interaction ──
+  const book = document.getElementById('book3d');
+  if (book) {
+    let bookRotY = -25;
+    let bookRotX = 5;
+    let targetRotY = -25;
+    let targetRotX = 5;
+
+    book.addEventListener('mousemove', (e) => {
+      const rect = book.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      targetRotY = -25 + x * 30;
+      targetRotX = 5 - y * 15;
+    });
+
+    book.addEventListener('mouseleave', () => {
+      targetRotY = -25;
+      targetRotX = 5;
+    });
+
+    function animateBook() {
+      bookRotY += (targetRotY - bookRotY) * 0.08;
+      bookRotX += (targetRotX - bookRotX) * 0.08;
+      book.style.transform = `rotateY(${bookRotY}deg) rotateX(${bookRotX}deg)`;
+      requestAnimationFrame(animateBook);
+    }
+    animateBook();
+  }
+
+  // ── Parallax ──
+  const parallaxBgs = document.querySelectorAll('.portrait-bg');
+  window.addEventListener('scroll', () => {
+    parallaxBgs.forEach(bg => {
+      const rect = bg.parentElement.getBoundingClientRect();
+      const scrollProgress = rect.top / window.innerHeight;
+      bg.style.transform = `translateY(${scrollProgress * 60}px)`;
+    });
+  }, { passive: true });
+
+  // ── Smooth Scroll for Nav ──
+  document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
