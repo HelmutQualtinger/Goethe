@@ -33,6 +33,88 @@
   --ink: #0D0A07;
 }
 
+/* ═══ DARK THEME ═══ */
+[data-theme="dark"] {
+  --cream: #141210;
+  --cream-dark: #1C1A16;
+  --gold: #C5A55A;
+  --gold-light: #D4BC7C;
+  --gold-dark: #A08030;
+  --green-deep: #0E1A0E;
+  --green-dark: #0A120A;
+  --green-forest: #1A2E1A;
+  --burgundy: #5A2030;
+  --burgundy-light: #6B2D3E;
+  --burgundy-dark: #3A1020;
+  --charcoal: #0A0A0A;
+  --charcoal-warm: #110F0C;
+  --brown-warm: #3A3028;
+  --brown-light: #7A6A5A;
+  --text-dark: #E8E0D0;
+  --text-body: #C8C0B0;
+  --text-muted: #9A9080;
+  --ink: #060504;
+}
+[data-theme="dark"] body {
+  background: #0E0C0A;
+}
+[data-theme="dark"] .bio-section {
+  background: #0E0C0A;
+}
+[data-theme="dark"] .bio-section:nth-child(even) {
+  background: linear-gradient(180deg, rgba(197, 165, 90, 0.03), transparent);
+}
+[data-theme="dark"] .bio-section .bio-text p:first-of-type::first-letter {
+  color: var(--gold);
+}
+[data-theme="dark"] .werk-card {
+  background: #1A1714;
+  border-color: rgba(197, 165, 90, 0.1);
+}
+[data-theme="dark"] .werk-card:hover {
+  background: #201C18;
+  border-color: var(--gold);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+[data-theme="dark"] .werke-section {
+  background: #0E0C0A;
+}
+[data-theme="dark"] .book-section {
+  background: linear-gradient(180deg, #0E0C0A 0%, #141210 50%, #0E0C0A 100%);
+}
+[data-theme="dark"] .science-section {
+  background: #0E0C0A;
+}
+[data-theme="dark"] .quill-section {
+  background: #0E0C0A;
+}
+[data-theme="dark"] .quill-text {
+  color: var(--cream-dark);
+  border-right-color: var(--gold);
+}
+[data-theme="dark"] .poem-full-section:not(.dark-poem) {
+  background: #0E0C0A;
+}
+[data-theme="dark"] .poem-full-section:not(.dark-poem) .poem-verses {
+  color: var(--text-body);
+}
+[data-theme="dark"] .farbenlehre-visual {
+  box-shadow: 0 0 0 12px #0E0C0A, 0 0 0 13px rgba(197, 165, 90, 0.3), 0 20px 60px rgba(0,0,0,0.3);
+}
+[data-theme="dark"] .farbenlehre-visual::before {
+  background: #0E0C0A;
+}
+[data-theme="dark"] nav.scrolled {
+  background: rgba(14, 12, 10, 0.95);
+}
+[data-theme="dark"] .ornament-line::before,
+[data-theme="dark"] .ornament-line::after {
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+[data-theme="dark"] #loader {
+  background: #0A0806;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -1319,6 +1401,62 @@ footer .footer-quote {
 }
 
 /* ═══════════════════════════════════════════
+   THEME TOGGLE BUTTON
+   ═══════════════════════════════════════════ */
+.theme-toggle {
+  position: fixed;
+  top: 1.2rem;
+  right: 1.5rem;
+  z-index: 1001;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(197, 165, 90, 0.3);
+  background: rgba(26, 24, 20, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  color: var(--gold);
+}
+.theme-toggle:hover {
+  border-color: var(--gold);
+  background: rgba(26, 24, 20, 0.8);
+  transform: scale(1.08);
+}
+[data-theme="dark"] .theme-toggle {
+  background: rgba(245, 240, 232, 0.08);
+}
+[data-theme="dark"] .theme-toggle:hover {
+  background: rgba(245, 240, 232, 0.14);
+}
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  position: absolute;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.theme-toggle .icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+.theme-toggle .icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+[data-theme="dark"] .theme-toggle .icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+[data-theme="dark"] .theme-toggle .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+/* ═══════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════ */
 @media (max-width: 900px) {
@@ -1358,6 +1496,12 @@ footer .footer-quote {
 </style>
 </head>
 <body>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln">
+  <span class="icon-sun">&#9788;</span>
+  <span class="icon-moon">&#9790;</span>
+</button>
 
 <!-- Loading Screen -->
 <div id="loader">
@@ -2298,6 +2442,25 @@ footer .footer-quote {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
+  });
+
+  // ── Theme Toggle ──
+  const themeToggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+
+  // Restore saved theme
+  const savedTheme = localStorage.getItem('goethe-theme');
+  if (savedTheme) html.setAttribute('data-theme', savedTheme);
+
+  themeToggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    if (next === 'light') {
+      html.removeAttribute('data-theme');
+    } else {
+      html.setAttribute('data-theme', 'dark');
+    }
+    localStorage.setItem('goethe-theme', next);
   });
 
 })();

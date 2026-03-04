@@ -23,6 +23,22 @@
   --ink: #0A0806;
 }
 
+/* ═══ LIGHT THEME ═══ */
+[data-theme="light"] {
+  --cream: #1A1814;
+  --cream-dark: #2A2520;
+  --gold: #A08030;
+  --gold-light: #8A7020;
+  --gold-dim: #6A5A30;
+  --green-deep: #E8E4D8;
+  --green-dark: #F0ECE2;
+  --burgundy: #D8C8C0;
+  --burgundy-dark: #E4D8D0;
+  --charcoal: #FAF6F0;
+  --charcoal-warm: #F5F0E8;
+  --ink: #FEFCF8;
+}
+
 html, body {
   width: 100vw;
   height: 100vh;
@@ -32,6 +48,175 @@ html, body {
   color: var(--cream);
   -webkit-font-smoothing: antialiased;
   cursor: none;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+[data-theme="light"] .cursor {
+  border-color: #A08030;
+  mix-blend-mode: normal;
+}
+[data-theme="light"] .progress-bar {
+  background: linear-gradient(90deg, #A08030, #8A5040);
+}
+[data-theme="light"] .quote-text::before {
+  color: #A08030;
+}
+[data-theme="light"] h1,
+[data-theme="light"] h2 {
+  color: #1A1814;
+}
+[data-theme="light"] .body-text {
+  color: #3A3530;
+}
+[data-theme="light"] .label {
+  color: #8A7020;
+}
+[data-theme="light"] .date-text {
+  color: #A08030;
+}
+[data-theme="light"] .quote-text {
+  color: #1A1814;
+}
+[data-theme="light"] .quote-source {
+  color: #6A5A30;
+}
+[data-theme="light"] .divider {
+  background: linear-gradient(90deg, transparent, #A08030, transparent);
+}
+[data-theme="light"] .orn {
+  color: #A08030;
+}
+[data-theme="light"] .werk-item {
+  border-left-color: #A08030;
+}
+[data-theme="light"] .werk-item h3 {
+  color: #5A4020;
+}
+[data-theme="light"] .werk-item .werk-year,
+[data-theme="light"] .werk-item .werk-desc {
+  color: #4A4038;
+}
+[data-theme="light"] .gedicht-item h3 {
+  color: #5A4020;
+}
+[data-theme="light"] .gedicht-item {
+  border-left-color: rgba(160, 128, 48, 0.3);
+}
+[data-theme="light"] .gedicht-excerpt {
+  color: #2A2520;
+}
+[data-theme="light"] .timeline-year {
+  color: #8A7020;
+}
+[data-theme="light"] .timeline-event {
+  color: #3A3530;
+}
+[data-theme="light"] .timeline-row {
+  border-bottom-color: rgba(160, 128, 48, 0.1);
+}
+[data-theme="light"] .poem-slide-header {
+  border-bottom-color: rgba(160, 128, 48, 0.15);
+}
+[data-theme="light"] .poem-slide-header h2 {
+  color: #1A1814;
+}
+[data-theme="light"] .poem-verses-body {
+  color: #2A2520;
+}
+[data-theme="light"] .poem-verses-body .stanza {
+  border-left-color: rgba(160, 128, 48, 0.15);
+}
+[data-theme="light"] .poem-verses-body .stanza.speaking {
+  border-left-color: #A08030;
+  background: rgba(160, 128, 48, 0.06);
+}
+[data-theme="light"] .poem-note-footer {
+  border-top-color: rgba(160, 128, 48, 0.1);
+  color: #6A5A30;
+}
+[data-theme="light"] .play-btn {
+  border-color: #8A7020;
+  color: #6A5020;
+}
+[data-theme="light"] .play-btn:hover {
+  background: rgba(160, 128, 48, 0.08);
+  border-color: #6A5020;
+}
+[data-theme="light"] .poem-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(160, 128, 48, 0.25);
+}
+[data-theme="light"] .farben-wheel {
+  box-shadow: 0 0 0 8px var(--ink), 0 0 0 10px rgba(160, 128, 48, 0.25), 0 0 60px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .farben-wheel::before {
+  background: var(--ink);
+}
+[data-theme="light"] .book-cover {
+  background: linear-gradient(135deg, #B08060, #8A5040 80%);
+  border-color: rgba(160, 128, 48, 0.3);
+}
+[data-theme="light"] .book-cover h3 {
+  color: #F5F0E8;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+[data-theme="light"] .book-cover .bc-author {
+  color: #E8E0D0;
+}
+[data-theme="light"] .book-cover .bc-border {
+  border-color: rgba(245, 240, 232, 0.3);
+}
+[data-theme="light"] .book-spine {
+  background: linear-gradient(90deg, #6A3828, #8A5040 40%, #6A3828);
+}
+/* Sidebar light */
+[data-theme="light"] .sidebar-nav {
+  background: linear-gradient(135deg, rgba(250, 246, 240, 0.97), rgba(245, 240, 232, 0.97));
+  border-right-color: rgba(160, 128, 48, 0.15);
+  box-shadow: 4px 0 40px rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .sidebar-nav .sidebar-header {
+  border-bottom-color: rgba(160, 128, 48, 0.12);
+}
+[data-theme="light"] .sidebar-nav .sidebar-header h3 {
+  color: #6A5020;
+}
+[data-theme="light"] .sidebar-nav .sidebar-header span {
+  color: #8A7A60;
+}
+[data-theme="light"] .sidebar-item .sb-title {
+  color: #3A3530;
+}
+[data-theme="light"] .sidebar-item.active .sb-title {
+  color: #6A5020;
+}
+[data-theme="light"] .sidebar-item .sb-num {
+  color: #8A7A60;
+}
+[data-theme="light"] .sidebar-item.active .sb-num {
+  color: #6A5020;
+}
+[data-theme="light"] .sidebar-item.active::before {
+  background: #A08030;
+}
+[data-theme="light"] .sidebar-item:hover {
+  background: rgba(160, 128, 48, 0.06);
+}
+[data-theme="light"] .sidebar-item.active {
+  background: rgba(160, 128, 48, 0.08);
+}
+[data-theme="light"] .sidebar-item.is-quote .sb-title {
+  color: #8A7A60;
+}
+[data-theme="light"] .sidebar-item .sb-type {
+  color: #8A7A60;
+}
+[data-theme="light"] .sidebar-divider {
+  background: rgba(160, 128, 48, 0.08);
+}
+[data-theme="light"] .slide-counter {
+  color: #8A7A60;
+}
+[data-theme="light"] .nav-hint {
+  color: #8A7A60;
 }
 
 /* ═══ CUSTOM CURSOR ═══ */
@@ -725,6 +910,57 @@ h3 {
   margin: 0.5vh 1.5rem;
 }
 
+/* ═══ THEME TOGGLE ═══ */
+.theme-toggle {
+  position: fixed;
+  top: 1.5vh;
+  right: 2vw;
+  z-index: 10001;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 184, 92, 0.25);
+  background: rgba(26, 23, 20, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.3s;
+  color: var(--gold);
+}
+.theme-toggle:hover {
+  border-color: var(--gold);
+  transform: scale(1.1);
+}
+[data-theme="light"] .theme-toggle {
+  background: rgba(245, 240, 232, 0.5);
+  border-color: rgba(160, 128, 48, 0.25);
+  color: #6A5020;
+}
+[data-theme="light"] .theme-toggle:hover {
+  border-color: #A08030;
+}
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  position: absolute;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.theme-toggle .icon-sun {
+  opacity: 0; transform: rotate(-90deg) scale(0.5);
+}
+.theme-toggle .icon-moon {
+  opacity: 1; transform: rotate(0deg) scale(1);
+}
+[data-theme="light"] .theme-toggle .icon-sun {
+  opacity: 1; transform: rotate(0deg) scale(1);
+}
+[data-theme="light"] .theme-toggle .icon-moon {
+  opacity: 0; transform: rotate(90deg) scale(0.5);
+}
+
 /* Side decorative lines */
 .slide::before {
   content: '';
@@ -751,6 +987,10 @@ h3 {
 <body>
 
 <div class="cursor" id="cursor"></div>
+<button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln" onclick="event.stopPropagation()">
+  <span class="icon-sun">&#9788;</span>
+  <span class="icon-moon">&#9790;</span>
+</button>
 <div class="progress-bar" id="progressBar"></div>
 <div class="slide-counter" id="slideCounter"></div>
 <div class="nav-hint" id="navHint">← → Navigieren · Leertaste = Vorlesen · F = Vollbild</div>
@@ -1870,6 +2110,29 @@ h3 {
   sidebar.addEventListener('click', (e) => e.stopPropagation());
 
   buildSidebar();
+
+
+  // ═══════════════════════════════════════
+  // THEME TOGGLE
+  // ═══════════════════════════════════════
+
+  const themeToggle = document.getElementById('themeToggle');
+  const htmlEl = document.documentElement;
+
+  // Restore saved theme
+  const savedTheme = localStorage.getItem('goethe-slide-theme');
+  if (savedTheme === 'light') htmlEl.setAttribute('data-theme', 'light');
+
+  themeToggle.addEventListener('click', () => {
+    const isLight = htmlEl.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      htmlEl.removeAttribute('data-theme');
+      localStorage.setItem('goethe-slide-theme', 'dark');
+    } else {
+      htmlEl.setAttribute('data-theme', 'light');
+      localStorage.setItem('goethe-slide-theme', 'light');
+    }
+  });
 
 })();
 </script>
