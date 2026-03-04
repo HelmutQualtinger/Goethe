@@ -1407,21 +1407,22 @@ footer .footer-quote {
   position: fixed;
   top: 1.2rem;
   right: 1.5rem;
-  z-index: 1001;
-  width: 42px;
-  height: 42px;
+  z-index: 99999;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  border: 1px solid rgba(197, 165, 90, 0.3);
-  background: rgba(26, 24, 20, 0.6);
+  border: 2px solid var(--gold);
+  background: rgba(26, 24, 20, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   transition: all 0.3s;
   color: var(--gold);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
 .theme-toggle:hover {
   border-color: var(--gold);
