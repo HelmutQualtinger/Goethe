@@ -594,6 +594,137 @@ h3 {
   transition: opacity 0.5s;
 }
 
+/* ═══ SIDEBAR NAVIGATION ═══ */
+.sidebar-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(135deg, rgba(10, 8, 6, 0.97), rgba(26, 23, 20, 0.97));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 10000;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(212, 184, 92, 0.12);
+  box-shadow: 4px 0 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.sidebar-nav.open {
+  transform: translateX(0);
+}
+/* Invisible hover trigger zone on the left edge */
+.sidebar-trigger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 100vh;
+  z-index: 9999;
+}
+.sidebar-nav .sidebar-header {
+  padding: 2.5vh 1.5rem 1.5vh;
+  border-bottom: 1px solid rgba(212, 184, 92, 0.1);
+  flex-shrink: 0;
+}
+.sidebar-nav .sidebar-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.sidebar-nav .sidebar-header span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  color: var(--gold-dim);
+  letter-spacing: 0.1em;
+}
+.sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1vh 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 184, 92, 0.2) transparent;
+}
+.sidebar-list::-webkit-scrollbar { width: 4px; }
+.sidebar-list::-webkit-scrollbar-thumb { background: rgba(212, 184, 92, 0.2); border-radius: 2px; }
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7vh 1.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'Cormorant Garamond', serif;
+}
+.sidebar-item:hover {
+  background: rgba(212, 184, 92, 0.06);
+}
+.sidebar-item.active {
+  background: rgba(212, 184, 92, 0.08);
+}
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 2px;
+  background: var(--gold);
+}
+.sidebar-item .sb-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.7rem;
+  color: var(--gold-dim);
+  min-width: 1.6rem;
+  text-align: right;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+.sidebar-item.active .sb-num { opacity: 1; color: var(--gold); }
+.sidebar-item .sb-title {
+  font-size: 0.9rem;
+  color: var(--cream-dark);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sidebar-item.active .sb-title {
+  color: var(--gold);
+  font-weight: 600;
+}
+.sidebar-item.is-quote .sb-title {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--gold-dim);
+}
+.sidebar-item .sb-type {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+/* Divider for sections */
+.sidebar-divider {
+  height: 1px;
+  background: rgba(212, 184, 92, 0.06);
+  margin: 0.5vh 1.5rem;
+}
+
 /* Side decorative lines */
 .slide::before {
   content: '';
@@ -623,6 +754,16 @@ h3 {
 <div class="progress-bar" id="progressBar"></div>
 <div class="slide-counter" id="slideCounter"></div>
 <div class="nav-hint" id="navHint">← → Navigieren · Leertaste = Vorlesen · F = Vollbild</div>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar-trigger" id="sidebarTrigger"></div>
+<nav class="sidebar-nav" id="sidebarNav">
+  <div class="sidebar-header">
+    <h3>Goethe</h3>
+    <span>Leben und Werk — 26 Folien</span>
+  </div>
+  <div class="sidebar-list" id="sidebarList"></div>
+</nav>
 
 <div class="slideshow" id="slideshow">
 
@@ -1589,6 +1730,146 @@ h3 {
 
   // Stop TTS on page unload
   window.addEventListener('beforeunload', () => speechSynthesis.cancel());
+
+
+  // ═══════════════════════════════════════
+  // SIDEBAR NAVIGATION
+  // ═══════════════════════════════════════
+
+  const sidebar = document.getElementById('sidebarNav');
+  const sidebarTrigger = document.getElementById('sidebarTrigger');
+  const sidebarList = document.getElementById('sidebarList');
+  let sidebarOpen = false;
+  let sidebarTimeout = null;
+
+  // Slide metadata for sidebar labels
+  const slideMeta = [
+    { title: 'Titelfolie',              type: '' },
+    { title: '»Es ist nicht genug…«',   type: 'Zitat', quote: true },
+    { title: 'Kindheit in Frankfurt',    type: 'Leben' },
+    { title: 'Leipzig & Straßburg',      type: 'Leben' },
+    { title: 'Sturm und Drang',         type: 'Leben' },
+    { title: '»Zwei Seelen…«',          type: 'Zitat', quote: true },
+    { title: 'Weimar',                  type: 'Leben' },
+    { title: 'Italienische Reise',      type: 'Leben' },
+    { title: 'Goethe & Schiller',       type: 'Leben' },
+    { title: '»Edel sei der Mensch…«',  type: 'Zitat', quote: true },
+    { title: 'Faust',                   type: 'Werk' },
+    { title: 'Werke I — Prosa & Dramen', type: 'Werke' },
+    { title: 'Werke II — Weitere',      type: 'Werke' },
+    { title: '»Nur wer die Sehnsucht…«', type: 'Zitat', quote: true },
+    { title: 'Gedichte — Übersicht',    type: 'Lyrik' },
+    { title: 'Erlkönig',               type: 'Ballade' },
+    { title: 'Der Zauberlehrling',      type: 'Ballade' },
+    { title: '»Über allen Gipfeln…«',   type: 'Zitat', quote: true },
+    { title: 'Farbenlehre & Morphologie', type: 'Wissen' },
+    { title: '»Man sieht nur…«',        type: 'Zitat', quote: true },
+    { title: 'Zeitstrahl I',            type: 'Zeit' },
+    { title: 'Zeitstrahl II',           type: 'Zeit' },
+    { title: '»Wer immer strebend…«',   type: 'Zitat', quote: true },
+    { title: 'Tod & Vermächtnis',       type: 'Leben' },
+    { title: '»Mehr Licht!«',           type: '' },
+    { title: 'Schlussfolie',            type: '' },
+  ];
+
+  // Build sidebar items
+  function buildSidebar() {
+    sidebarList.innerHTML = '';
+    let lastType = '';
+    slideMeta.forEach((meta, i) => {
+      // Add divider between different section types
+      if (meta.type && meta.type !== lastType && !meta.quote && lastType) {
+        const div = document.createElement('div');
+        div.className = 'sidebar-divider';
+        sidebarList.appendChild(div);
+      }
+      if (!meta.quote) lastType = meta.type;
+
+      const btn = document.createElement('button');
+      btn.className = 'sidebar-item' + (meta.quote ? ' is-quote' : '') + (i === current ? ' active' : '');
+      btn.innerHTML =
+        '<span class="sb-num">' + (i + 1) + '</span>' +
+        '<span class="sb-title">' + meta.title + '</span>' +
+        (meta.type ? '<span class="sb-type">' + meta.type + '</span>' : '');
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        goTo(i);
+        updateSidebarActive();
+        closeSidebar();
+      });
+      sidebarList.appendChild(btn);
+    });
+  }
+
+  function updateSidebarActive() {
+    const items = sidebarList.querySelectorAll('.sidebar-item');
+    items.forEach((item, i) => {
+      item.classList.toggle('active', i === current);
+    });
+    // Scroll active item into view
+    const activeItem = sidebarList.querySelector('.sidebar-item.active');
+    if (activeItem) {
+      activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
+  function openSidebar() {
+    if (sidebarOpen) return;
+    sidebarOpen = true;
+    sidebar.classList.add('open');
+    clearTimeout(sidebarTimeout);
+    updateSidebarActive();
+  }
+
+  function closeSidebar() {
+    sidebarOpen = false;
+    sidebar.classList.remove('open');
+  }
+
+  // Show on mouse near left edge
+  sidebarTrigger.addEventListener('mouseenter', () => {
+    clearTimeout(sidebarTimeout);
+    openSidebar();
+  });
+
+  // Keep open while hovering sidebar
+  sidebar.addEventListener('mouseenter', () => {
+    clearTimeout(sidebarTimeout);
+  });
+
+  // Close when mouse leaves sidebar
+  sidebar.addEventListener('mouseleave', () => {
+    sidebarTimeout = setTimeout(closeSidebar, 300);
+  });
+
+  // Also close trigger zone timeout
+  sidebarTrigger.addEventListener('mouseleave', () => {
+    sidebarTimeout = setTimeout(() => {
+      if (!sidebar.matches(':hover')) closeSidebar();
+    }, 300);
+  });
+
+  // Update sidebar on slide change — hook into goTo
+  const originalGoTo = goTo;
+  // We already have goTo, so patch updateUI instead
+  const origUpdateUI = updateUI;
+  updateUI = function() {
+    origUpdateUI();
+    if (sidebarOpen) updateSidebarActive();
+  };
+
+  // Keyboard: Escape closes sidebar, Tab toggles
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      sidebarOpen ? closeSidebar() : openSidebar();
+    }
+  });
+
+  // Prevent sidebar clicks from navigating slides
+  sidebar.addEventListener('click', (e) => e.stopPropagation());
+
+  buildSidebar();
 
 })();
 </script>
