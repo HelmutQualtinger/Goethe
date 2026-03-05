@@ -1,6 +1,6 @@
 # Johann Wolfgang von Goethe — Leben und Werk
 
-![Goethe — Dichter · Denker · Naturforscher](Goethe.png)
+![Goethe — Dichter · Denker · Naturforscher](Goethe.jpg)
 
 Interaktive Biographie und Werkübersicht zu Johann Wolfgang von Goethe (1749–1832), umgesetzt als immersive Webseite, Projektions-Slideshow und PDF-Handout.
 
